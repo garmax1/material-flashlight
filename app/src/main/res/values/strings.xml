@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">Material Flashlight</string>
+
+    <string name="text_modes">Modes</string>
+    <string name="text_keep_screen_on">Keep Screen On</string>
+    <string name="text_torch">Torch</string>
+    <string name="text_interval_strobe">Interval Strobe</string>
+    <string name="text_sound_strobe">Music Strobe</string>
+    <string name="text_auto_turn_on">Auto turn on flash on start</string>
+    <string name="text_version">Version: %s</string>
+
+    <string name="toast_module_not_supported">Selected module is not supported on this device, try another.</string>
+    <string name="toast_module_not_available">Selected module can\'t be used now, try another.</string>
+
+    <string name="notification_light">The light is on</string>
+    <string name="notification_tap_to_turn_off">Tap to turn off</string>
+
+    <string name="warning_another_app_use_flash">Another application is using camera\'s flash</string>
+</resources>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:drawable="@drawable/vc_appbar_day"
+    tools:ignore="NewApi">
+    <target
+        android:animation="@animator/appbar_background_night_animation"
+        android:name="background"/>
+
+    <target
+        android:animation="@animator/appbar_grass_night_animation"
+        android:name="grass"/>
+
+    <target
+        android:animation="@animator/appbar_hide_animation"
+        android:name="sun"/>
+
+    <target
+        android:animation="@animator/appbar_show_animation"
+        android:name="moon"/>
+</animated-vector>
