@@ -56,8 +56,6 @@ class FlashModule(context: Context) : ModuleBase(context) {
     }
 
     override fun turnOn() {
-        if(mIsReleasing) return;
-
         val params = mCamera!!.parameters
 
         val flashModes = params.supportedFlashModes
@@ -73,6 +71,7 @@ class FlashModule(context: Context) : ModuleBase(context) {
     }
 
     override fun turnOff() {
+        if(mIsReleasing) return;
 
         val params = mCamera!!.parameters
         params.flashMode = Camera.Parameters.FLASH_MODE_OFF
