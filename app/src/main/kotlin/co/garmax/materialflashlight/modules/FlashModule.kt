@@ -56,6 +56,7 @@ class FlashModule(context: Context) : ModuleBase(context) {
     }
 
     override fun turnOn() {
+        if(mIsReleasing) return;
 
         val params = mCamera!!.parameters
 
