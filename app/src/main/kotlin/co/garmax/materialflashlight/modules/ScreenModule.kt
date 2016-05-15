@@ -10,34 +10,34 @@ import android.content.Context
 class ScreenModule(context: Context) : ModuleBase(context) {
 
     override fun turnOn() {
-        throw UnsupportedOperationException()
+
     }
 
     override fun turnOff() {
-        throw UnsupportedOperationException()
+
     }
 
     override fun isAvailable(): Boolean {
-        throw UnsupportedOperationException()
+        return true
     }
 
     override fun isSupported(): Boolean {
-        throw UnsupportedOperationException()
+        return true
     }
 
     override fun setBrightnessVolume(percent: Int) {
-        throw UnsupportedOperationException()
+
     }
 
     override fun start() {
-        throw UnsupportedOperationException()
+
     }
 
     override fun stop() {
-        throw UnsupportedOperationException()
+
     }
 
     override fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
-        throw UnsupportedOperationException()
+        return true
     }
 }

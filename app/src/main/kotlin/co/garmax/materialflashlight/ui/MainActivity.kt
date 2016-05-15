@@ -167,7 +167,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
                 // Turn off light
                 if (mModuleManager.isRunning()) {
-                    ModeService.setMode(this, ModeBase.MODE_OFF)
+                    turnOff()
                 }
                 // Turn on light
                 else {
@@ -184,6 +184,13 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     }
 
     private fun changeModule(module: Int) {
+        val isRunning = mModuleManager.isRunning()
+
+        // Stop previous module
+        if(isRunning) {
+            turnOff()
+        }
+
         mPreferences.module = module
 
         if (module == ModuleBase.MODULE_CAMERA_FLASHLIGHT) {
@@ -193,6 +200,12 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         } else {
             throw IllegalArgumentException("Unknown module type " + module)
         }
+
+        turnOn()
+    }
+
+    private fun turnOff() {
+        ModeService.setMode(this, ModeBase.MODE_OFF)
     }
 
     private fun turnOn() {
