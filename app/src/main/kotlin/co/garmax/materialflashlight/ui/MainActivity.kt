@@ -15,9 +15,13 @@ import co.garmax.materialflashlight.BuildConfig
 import co.garmax.materialflashlight.CustomApplication
 import co.garmax.materialflashlight.Preferences
 import co.garmax.materialflashlight.R
+import co.garmax.materialflashlight.modes.ModeBase
 import co.garmax.materialflashlight.modes.ModeService
 import co.garmax.materialflashlight.modes.SoundStrobeMode
+import co.garmax.materialflashlight.modules.FlashModule
+import co.garmax.materialflashlight.modules.ModuleBase
 import co.garmax.materialflashlight.modules.ModuleManager
+import co.garmax.materialflashlight.modules.ScreenModule
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener,
@@ -35,6 +39,10 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
     lateinit var mRadioIntervalStrobe: RadioButton
     @Bind(R.id.radio_sound_strobe)
     lateinit var mRadioSoundStrobe: RadioButton
+    @Bind(R.id.radio_camera_flashlight)
+    lateinit var mRadioCameraFlashlight: RadioButton
+    @Bind(R.id.radio_screen)
+    lateinit var mRadioScreen: RadioButton
     @Bind(R.id.fab)
     lateinit var mFab: FloatingActionButton
     @Bind(R.id.text_version)
@@ -60,7 +68,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         mAnimatedDrawableNight = AnimatedVectorDrawableCompat.create(this, R.drawable.avc_appbar_night)
                 as AnimatedVectorDrawableCompat
 
-        setupLayout(savedInstanceState)
+        setupLayout()
 
         mModuleManager.setOnLightStateChangedListener(this)
 
@@ -74,33 +82,43 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         }
     }
 
-    private fun setupLayout(savedInstanceState: Bundle?) {
+    private fun setupLayout() {
+
+        // Restore settings
+        // Set module
+        when (mPreferences.module) {
+            ModuleBase.MODULE_CAMERA_FLASHLIGHT -> {
+                mRadioCameraFlashlight.isChecked = true
+            }
+            ModuleBase.MODULE_SCREEN -> {
+                mRadioScreen.isChecked = true
+            }
+        }
+
+        // Set mode
+        when (mPreferences.mode) {
+            ModeBase.MODE_INTERVAL_STROBE -> {
+                mRadioIntervalStrobe.isChecked = true
+            }
+            ModeBase.MODE_TORCH -> {
+                mRadioTorch.isChecked = true
+            }
+            ModeBase.MODE_SOUND_STROBE -> {
+                mRadioSoundStrobe.isChecked = true
+            }
+        }
+
+        mSwitchKeepScreenOn.isChecked = mPreferences.isKeepScreenOn
+        mSwitchAutoTurnOn.isChecked = mPreferences.isAutoTurnOn
 
         mRadioSoundStrobe.setOnCheckedChangeListener(this)
         mRadioIntervalStrobe.setOnCheckedChangeListener(this)
         mRadioTorch.setOnCheckedChangeListener(this)
         mSwitchKeepScreenOn.setOnCheckedChangeListener(this)
         mSwitchAutoTurnOn.setOnCheckedChangeListener(this)
-
-        mTextVersion.setText(getString(R.string.text_version, BuildConfig.VERSION_NAME));
-
-        // Restore settings
-        if (savedInstanceState == null) {
-            mSwitchKeepScreenOn.isChecked = mPreferences.isKeepScreenOn
-            mSwitchAutoTurnOn.isChecked = mPreferences.isAutoTurnOn
-
-            when (mPreferences.lightMode) {
-                ModeService.MODE_INTERVAL_STROBE -> {
-                    mRadioIntervalStrobe.isChecked = true
-                }
-                ModeService.MODE_TORCH -> {
-                    mRadioTorch.isChecked = true
-                }
-                ModeService.MODE_SOUND_STROBE -> {
-                    mRadioSoundStrobe.isChecked = true
-                }
-            }
-        }
+        mRadioCameraFlashlight.setOnCheckedChangeListener(this)
+        mRadioScreen.setOnCheckedChangeListener(this)
+        mTextVersion.text = getString(R.string.text_version, BuildConfig.VERSION_NAME)
     }
 
     override fun stateChanged(turnedOn: Boolean) {
@@ -138,14 +156,14 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         )
     }
 
-    @OnClick(R.id.fab, R.id.layout_keep_screen_on, R.id.layout_strobe_enabled, R.id.layout_auto_turn_on)
+    @OnClick(R.id.fab, R.id.layout_keep_screen_on, R.id.layout_auto_turn_on)
     internal fun onClick(view: View) {
         when (view.id) {
             R.id.fab -> {
 
                 // Turn off light
                 if (mModuleManager.isRunning()) {
-                    ModeService.setMode(this, ModeService.MODE_OFF)
+                    turnOff()
                 }
                 // Turn on light
                 else {
@@ -159,6 +177,30 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             R.id.layout_auto_turn_on ->
                 mSwitchAutoTurnOn.toggle()
         }
+    }
+
+    private fun changeModule(module: Int) {
+        val isRunning = mModuleManager.isRunning()
+
+        // Stop previous module
+        if (isRunning) turnOff()
+
+        mPreferences.module = module
+
+        if (module == ModuleBase.MODULE_CAMERA_FLASHLIGHT) {
+            mModuleManager.module = FlashModule(this);
+        } else if (module == ModuleBase.MODULE_SCREEN) {
+            mModuleManager.module = ScreenModule(this);
+        } else {
+            throw IllegalArgumentException("Unknown module type " + module)
+        }
+
+        // Turn on if was running
+        if (isRunning) turnOn()
+    }
+
+    private fun turnOff() {
+        ModeService.setMode(this, ModeBase.MODE_OFF)
     }
 
     private fun turnOn() {
@@ -177,10 +219,10 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
             if (!mModuleManager.checkPermissions(RC_MODULE_PERMISSIONS, this)) return
 
             // Exit if we don't have permission for sound strobe mode
-            if(mPreferences.lightMode == ModeService.MODE_SOUND_STROBE &&
+            if (mPreferences.mode == ModeBase.MODE_SOUND_STROBE &&
                     !SoundStrobeMode.checkPermissions(RC_MODE_PERMISSIONS, this)) return
 
-            ModeService.setMode(this, mPreferences.lightMode)
+            ModeService.setMode(this, mPreferences.mode)
         }
     }
 
@@ -193,19 +235,24 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
                 mPreferences.isAutoTurnOn = isChecked
             }
             R.id.radio_sound_strobe -> {
-                if (isChecked) changeMode(ModeService.MODE_SOUND_STROBE)
+                if (isChecked) changeMode(ModeBase.MODE_SOUND_STROBE)
             }
             R.id.radio_interval_strobe -> {
-                if (isChecked) changeMode(ModeService.MODE_INTERVAL_STROBE)
+                if (isChecked) changeMode(ModeBase.MODE_INTERVAL_STROBE)
             }
             R.id.radio_torch -> {
-                if (isChecked) changeMode(ModeService.MODE_TORCH)
+                if (isChecked) changeMode(ModeBase.MODE_TORCH)
             }
+            R.id.radio_camera_flashlight ->
+                if (isChecked) changeModule(ModuleBase.MODULE_CAMERA_FLASHLIGHT)
+
+            R.id.radio_screen ->
+                if (isChecked) changeModule(ModuleBase.MODULE_SCREEN)
         }
     }
 
     private fun changeMode(mode: Int) {
-        mPreferences.lightMode = mode
+        mPreferences.mode = mode
 
         // Start new mode
         if (mModuleManager.isRunning()) turnOn()
@@ -216,7 +263,7 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
 
         // Stop service if user exit with back button
         if (mModuleManager.isRunning()) {
-            ModeService.setMode(this, ModeService.MODE_OFF)
+            ModeService.setMode(this, ModeBase.MODE_OFF)
         }
     }
 
@@ -226,8 +273,8 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         if (requestCode == RC_MODULE_PERMISSIONS || requestCode == RC_MODE_PERMISSIONS) {
             if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 turnOn();
-            } else if(mModuleManager.isRunning()) {
-                ModeService.setMode(this, ModeService.MODE_OFF)
+            } else if (mModuleManager.isRunning()) {
+                ModeService.setMode(this, ModeBase.MODE_OFF)
             }
         }
     }

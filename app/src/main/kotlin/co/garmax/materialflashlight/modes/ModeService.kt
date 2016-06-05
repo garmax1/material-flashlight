@@ -36,13 +36,13 @@ class ModeService : Service() {
         }
 
         // Get mode
-        val mode = intent.getIntExtra(EXTRA_MODE, MODE_OFF)
+        val mode = intent.getIntExtra(EXTRA_MODE, ModeBase.MODE_OFF)
 
         // Execute on background thread
         mExecutorService.execute(fun () {
 
             // Handle mode
-            if (mode == MODE_OFF) {
+            if (mode == ModeBase.MODE_OFF) {
 
                 stop()
 
@@ -66,11 +66,11 @@ class ModeService : Service() {
                 }
 
                 // Start new module
-                if (mode == MODE_TORCH) {
+                if (mode == ModeBase.MODE_TORCH) {
                     mCurrentMode = TorchMode(mModuleManager)
-                } else if (mode == MODE_INTERVAL_STROBE) {
+                } else if (mode == ModeBase.MODE_INTERVAL_STROBE) {
                     mCurrentMode = IntervalStrobeMode(mModuleManager)
-                } else if (mode == MODE_SOUND_STROBE) {
+                } else if (mode == ModeBase.MODE_SOUND_STROBE) {
                     mCurrentMode = SoundStrobeMode(mModuleManager)
                 }
 
@@ -106,7 +106,7 @@ class ModeService : Service() {
                 .setContentText(getString(R.string.notification_tap_to_turn_off))
                 .setContentTitle(getString(R.string.notification_light))
 
-        val notificationIntent = buildIntent(applicationContext, MODE_OFF)
+        val notificationIntent = buildIntent(applicationContext, ModeBase.MODE_OFF)
         val pendingIntent = PendingIntent.getService(applicationContext, 0, notificationIntent, 0)
         notifyBuilder.setContentIntent(pendingIntent)
 
@@ -125,11 +125,6 @@ class ModeService : Service() {
 
         private const val EXTRA_MODE = "extra_mode"
         private const val NOTIFICATION_ID = 1
-
-        const val MODE_OFF = 0
-        const val MODE_SOUND_STROBE = 1
-        const val MODE_INTERVAL_STROBE = 2
-        const val MODE_TORCH = 3
 
         fun setMode(context: Context, mode: Int) {
             context.startService(buildIntent(context, mode))

@@ -3,7 +3,8 @@ package co.garmax.materialflashlight
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import co.garmax.materialflashlight.modes.ModeService
+import co.garmax.materialflashlight.modes.ModeBase
+import co.garmax.materialflashlight.modules.ModuleBase
 
 class Preferences(internal var mContext: Context) {
 
@@ -21,13 +22,18 @@ class Preferences(internal var mContext: Context) {
         get() = mSharedPreferences.getBoolean(AUTO_TURN_ON, false)
         set(enabled) = mSharedPreferences.edit().putBoolean(AUTO_TURN_ON, enabled).apply()
 
-    var lightMode: Int
-        get() = mSharedPreferences.getInt(LIGHT_MODE, ModeService.MODE_TORCH)
-        set(mode) = mSharedPreferences.edit().putInt(LIGHT_MODE, mode).apply()
+    var mode: Int
+        get() = mSharedPreferences.getInt(MODE, ModeBase.MODE_TORCH)
+        set(mode) = mSharedPreferences.edit().putInt(MODE, mode).apply()
+
+    var module: Int
+        get() = mSharedPreferences.getInt(MODULE, ModuleBase.MODULE_CAMERA_FLASHLIGHT)
+        set(mode) = mSharedPreferences.edit().putInt(MODULE, mode).apply()
 
     companion object {
         private const val KEEP_SCREEN_ON = "keep_screen_on"
-        private const val LIGHT_MODE = "light_mode"
+        private const val MODE = "mode"
+        private const val MODULE = "module"
         private const val AUTO_TURN_ON = "auto_turn_on"
     }
 }
