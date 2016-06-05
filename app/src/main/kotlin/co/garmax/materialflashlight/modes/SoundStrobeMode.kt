@@ -49,7 +49,7 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
         }
 
         private fun getAmplitude(): Int {
-            var buffer = ShortArray(mBufferSize)
+            val buffer = ShortArray(mBufferSize)
             mAudioRecord.read(buffer, 0, mBufferSize);
             var max: Short = 0
             for (s in buffer) {
@@ -77,7 +77,7 @@ class SoundStrobeMode(moduleManager: ModuleManager) : ModeBase(moduleManager) {
             }
 
             // Calculate percentage of current amplitude of difference max and min amplitude
-            var avgAmplitude = (curAmplitude - mMinAmplitude) * 100 /
+            val avgAmplitude = (curAmplitude - mMinAmplitude) * 100 /
                     (mMaxAmplitude - mMinAmplitude)
 
             Timber.d("Sound amplitude min: %d, max: %d, cur: %d; avg: %d", mMinAmplitude, mMaxAmplitude,

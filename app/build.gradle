@@ -21,8 +21,8 @@ android {
         applicationId "co.garmax.materialflashlight"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 8
-        versionName "1.0.0"
+        versionCode 9
+        versionName "1.1.0"
         vectorDrawables.useSupportLibrary = true
     }
 
