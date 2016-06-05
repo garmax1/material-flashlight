@@ -47,9 +47,6 @@ class ScreenModuleActivity : AppCompatActivity() {
         setContentView(R.layout.activity_screen_module)
         ButterKnife.bind(this)
 
-        // Disable appbar
-        supportActionBar?.hide()
-
         // Set max brightness
         val lp = window.attributes;
         lp.screenBrightness = 1f;
@@ -83,13 +80,18 @@ class ScreenModuleActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+        // Close main activity
+        // Start activity
+        val intent = Intent(this, MainActivity::class.java)
+        intent.putExtra(MainActivity.EXTRA_FINISH, true)
+        startActivity(intent)
 
-        //TODO close main activity on back button as well
-
+        // Stop service
         ModeService.setMode(this, ModeBase.MODE_OFF)
 
-        finish()
+        // Close current activity
+        super.onBackPressed()
+
     }
 
     companion object {

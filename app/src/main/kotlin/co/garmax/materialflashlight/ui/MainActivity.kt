@@ -1,5 +1,6 @@
 package co.garmax.materialflashlight.ui
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.design.widget.FloatingActionButton
@@ -279,8 +280,18 @@ class MainActivity : AppCompatActivity(), CompoundButton.OnCheckedChangeListener
         }
     }
 
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+
+        if(intent != null && intent.getBooleanExtra(EXTRA_FINISH, false)) {
+            finish();
+        }
+    }
+
     companion object {
         private const val RC_MODULE_PERMISSIONS = 0;
         private const val RC_MODE_PERMISSIONS = 1;
+
+        const val EXTRA_FINISH = "extra_finish";
     }
 }
