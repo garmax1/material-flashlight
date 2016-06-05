@@ -1,13 +1,10 @@
 package co.garmax.materialflashlight.modules
 
-import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
+import android.os.Build
 import android.provider.Settings
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import co.garmax.materialflashlight.ui.ScreenModuleActivity
 
@@ -78,10 +75,10 @@ class ScreenModule(context: Context) : ModuleBase(context) {
     }
 
     override fun checkPermissions(requestCode: Int, activity: Activity): Boolean {
-        if (ContextCompat.checkSelfPermission(context,
-                Manifest.permission.WRITE_SETTINGS) != PackageManager.PERMISSION_GRANTED) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.System.canWrite(activity)) {
 
-            ActivityCompat.requestPermissions(activity, arrayOf(Manifest.permission.WRITE_SETTINGS), requestCode);
+            val grantIntent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            activity.startActivity(grantIntent);
 
             return false;
         }
