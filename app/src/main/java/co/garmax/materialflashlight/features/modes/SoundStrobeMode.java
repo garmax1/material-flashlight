@@ -12,6 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import co.garmax.materialflashlight.ui.PermissionsActivity;
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
@@ -24,15 +25,19 @@ public class SoundStrobeMode extends ModeBase {
     private static final int INCREASE_STEP = 150;
     private static final int MAX_AMPLITUDE = 32767;
 
+    private Scheduler workerScheduler;
     private Context context;
+    private Disposable disposable;
+
+    // Audio staff
     private AudioRecord audioRecord;
     private int bufferSize;
-    private Disposable disposable;
     private int maxAmplitude;
     private int minAmplitude;
 
-    public SoundStrobeMode(Context context) {
+    public SoundStrobeMode(Context context, Scheduler workerScheduler) {
         this.context = context;
+        this.workerScheduler = workerScheduler;
     }
 
     @Override
@@ -60,7 +65,10 @@ public class SoundStrobeMode extends ModeBase {
         minAmplitude = 0;
         maxAmplitude = 0;
 
-        disposable = Observable.interval(CHECK_AMPLITUDE_PERIOD, TimeUnit.MILLISECONDS)
+        disposable = Observable.interval(0,
+                CHECK_AMPLITUDE_PERIOD,
+                TimeUnit.MILLISECONDS,
+                workerScheduler)
                 .subscribe(any -> setBrightness(amplitudePercentage(getAmplitude())));
 
         setLightState(true);
@@ -68,11 +76,11 @@ public class SoundStrobeMode extends ModeBase {
 
     @Override
     public void stop() {
-        if(disposable != null) {
+        if (disposable != null) {
             disposable.dispose();
         }
 
-        if(audioRecord != null) {
+        if (audioRecord != null) {
             audioRecord.stop();
         }
 

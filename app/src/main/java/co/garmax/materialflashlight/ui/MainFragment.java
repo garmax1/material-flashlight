@@ -2,14 +2,12 @@ package co.garmax.materialflashlight.ui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +25,7 @@ import co.garmax.materialflashlight.BuildConfig;
 import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
-import dagger.android.support.AndroidSupportInjection;
-import io.reactivex.android.schedulers.AndroidSchedulers;
+import co.garmax.materialflashlight.utils.PostExecutionThread;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
@@ -37,7 +34,7 @@ import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_SOS;
 import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_SOUND_STROBE;
 import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_TORCH;
 
-public class MainFragment extends Fragment {
+public class MainFragment extends BaseFragment {
 
     @BindView(R.id.image_appbar)
     ImageView imageAppbar;
@@ -70,10 +67,19 @@ public class MainFragment extends Fragment {
     @Inject
     LightManager lightManager;
 
+    @Inject
+    PostExecutionThread postExecutionThread;
+
     private AnimatedVectorDrawableCompat animatedDrawableDay;
     private AnimatedVectorDrawableCompat animatedDrawableNight;
     private Disposable disposableLightToggle;
     private ValueAnimator backgroundColorAnimation;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setImmersiveMode(false);
+    }
 
     @Nullable
     @Override
@@ -97,21 +103,18 @@ public class MainFragment extends Fragment {
         setupLayout(savedInstanceState);
     }
 
-    @Override
-    public void onAttach(Context context) {
-        AndroidSupportInjection.inject(this);
-        super.onAttach(context);
-    }
-
     private void setupLayout(@Nullable Bundle savedInstanceState) {
         // Handle toggle of the light
         disposableLightToggle = lightManager.turnStateStream()
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(postExecutionThread.getScheduler())
                 .subscribe(isLightOn -> setState(isLightOn, true));
 
-        // Handle auto turn on
-        if (savedInstanceState == null && settingsRepository.isAutoTurnOn()) {
-            lightManager.turnOn();
+
+        if (savedInstanceState == null) {
+            // Handle auto turn on
+            if(settingsRepository.isAutoTurnOn()) {
+                lightManager.turnOn();
+            }
 
             // Set module
             switch (settingsRepository.getModule()) {
@@ -141,7 +144,7 @@ public class MainFragment extends Fragment {
         }
         // Restore state on recreation
         else {
-            setState(lightManager.isTurnedOnState(), false);
+            setState(lightManager.isTurnedOn(), false);
         }
 
         switchKeepScreenOn.setChecked(settingsRepository.isKeepScreenOn());
@@ -228,7 +231,7 @@ public class MainFragment extends Fragment {
     void onClick(View view) {
         switch (view.getId()) {
             case R.id.fab:
-                if (lightManager.isTurnedOnState()) {
+                if (lightManager.isTurnedOn()) {
                     lightManager.turnOff();
                 } else {
                     lightManager.turnOn();

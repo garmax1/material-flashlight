@@ -4,6 +4,7 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
+import co.garmax.materialflashlight.features.ForegroundService;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
 import co.garmax.materialflashlight.ui.PermissionsActivity;
@@ -35,8 +36,10 @@ public abstract class AppModule {
 
     @Singleton
     @Provides
-    static LightManager lightManager(Context context, SettingsRepository settingsRepository) {
-        return new LightManager(context, settingsRepository);
+    static LightManager lightManager(Context context,
+                                     SettingsRepository settingsRepository,
+                                     Scheduler workerScheduler) {
+        return new LightManager(context, workerScheduler, settingsRepository);
     }
 
     @ActivityScope
@@ -46,4 +49,8 @@ public abstract class AppModule {
     @ActivityScope
     @ContributesAndroidInjector
     abstract PermissionsActivity permissionsActivity();
+
+    @ContributesAndroidInjector
+    @ServiceScope
+    abstract ForegroundService foregroundService();
 }

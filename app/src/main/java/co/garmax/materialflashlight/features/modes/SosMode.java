@@ -3,6 +3,7 @@ package co.garmax.materialflashlight.features.modes;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -20,10 +21,18 @@ public class SosMode extends ModeBase {
             + DELAY_LONG;
 
     private Disposable disposable;
+    private Scheduler workerScheduler;
+
+    public SosMode(Scheduler workerScheduler) {
+        this.workerScheduler = workerScheduler;
+    }
 
     @Override
     public void start() {
-        disposable = Observable.interval(0, SOS_PERIOD, TimeUnit.MILLISECONDS)
+        disposable = Observable.interval(0,
+                SOS_PERIOD,
+                TimeUnit.MILLISECONDS,
+                workerScheduler)
                 .doOnNext(any -> setLightState(true))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
                 .doOnNext(any -> setLightState(false))// 1 short
@@ -60,12 +69,13 @@ public class SosMode extends ModeBase {
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
                 .doOnNext(any -> setLightState(false))// 1 short
                 .delay(DELAY_LONG, TimeUnit.MILLISECONDS)
-                .subscribe(any -> {});
+                .subscribe(any -> {
+                });
     }
 
     @Override
     public void stop() {
-        if(disposable != null) {
+        if (disposable != null) {
             disposable.dispose();
         }
         setLightState(false);

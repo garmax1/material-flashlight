@@ -5,17 +5,15 @@ import android.support.annotation.NonNull;
 import co.garmax.materialflashlight.features.modes.ModeBase;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
+import io.reactivex.subjects.BehaviorSubject;
 
 public abstract class ModuleBase {
 
     private ModeBase currentMode;
-    private boolean isTurnedOn = false;
     private Disposable disposableLightState;
     private Disposable disposableBrightness;
 
-    private Subject<Boolean> turnStateObservable = PublishSubject.create();
+    private BehaviorSubject<Boolean> turnStateObservable = BehaviorSubject.create();
 
     public Observable<Boolean> turnState() {
         return turnStateObservable;
@@ -39,8 +37,13 @@ public abstract class ModuleBase {
                     }
                 });
 
-        if (isTurnedOn) {
-            currentMode.start();
+        if (isTurnedOn()) {
+            // Check that we can
+            if (!checkPermissions()) {
+                turnOff();
+            } else {
+                currentMode.start();
+            }
         }
     }
 
@@ -48,25 +51,19 @@ public abstract class ModuleBase {
      * Turn on module
      */
     public void turnOn() {
-        if(!isTurnedOn) {
-            if (currentMode == null) {
-                throw new IllegalStateException("Mode is null in the current module");
-            }
-            currentMode.start();
-            isTurnedOn = true;
-            turnStateObservable.onNext(isTurnedOn);
+        if (currentMode == null) {
+            throw new IllegalStateException("Mode is null in the current module");
         }
+        currentMode.start();
+        turnStateObservable.onNext(true);
     }
 
     /**
      * Turn off module
      */
     public void turnOff() {
-        if (isTurnedOn) {
-            isTurnedOn = false;
-            invalidateMode();
-            turnStateObservable.onNext(isTurnedOn);
-        }
+        invalidateMode();
+        turnStateObservable.onNext(false);
     }
 
     /**
@@ -116,6 +113,6 @@ public abstract class ModuleBase {
     }
 
     public boolean isTurnedOn() {
-        return isTurnedOn;
+        return turnStateObservable.getValue() == Boolean.TRUE;
     }
 }

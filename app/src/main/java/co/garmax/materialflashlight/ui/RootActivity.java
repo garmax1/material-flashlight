@@ -61,12 +61,19 @@ public class RootActivity extends AppCompatActivity implements HasSupportFragmen
                 && settingsRepository.getModule() == LightManager.Module.MODULE_SCREEN)
                 ? new LightFragment() : new MainFragment();
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.layout_container,
-                        fragment,
-                        fragment.getClass().getName())
-                .commit();
+        Fragment fragmentCurrent = getSupportFragmentManager()
+                .findFragmentById(R.id.layout_container);
+
+        // Change fragment only if fragment is different
+        if(fragmentCurrent == null
+                || !fragment.getClass().equals(fragmentCurrent.getClass())) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.layout_container,
+                            fragment,
+                            fragment.getClass().getName())
+                    .commit();
+        }
     }
 
     @Override
