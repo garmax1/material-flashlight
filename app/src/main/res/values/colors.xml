@@ -5,11 +5,13 @@
     <color name="colorPrimaryLight">#E1BEE7</color>
     <color name="colorAccent">#448AFF</color>
     <color name="colorPrimaryText">#212121</color>
-    <color name="colorSecondaryText">#727272</color>
-    <color name="colorDivider">#B6B6B6</color>
-    <color name="colorIcon">#FFFFFF</color>
+    <color name="statusBarGradientBlack">#DD666666</color>
+    <color name="statusBarGradientTransparent">#00666666</color>
+
 
     <color name="tint">#99FFFFFF</color>
     <color name="green">#4CAF50</color>
     <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="white70">#B3FFFFFF</color>
 </resources>

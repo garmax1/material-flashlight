@@ -3,19 +3,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:drawable="@drawable/vc_appbar_day"
     tools:ignore="NewApi">
+
     <target
-        android:animation="@animator/appbar_background_night_animation"
+        android:animation="@animator/appbar_background_night"
         android:name="background"/>
 
     <target
-        android:animation="@animator/appbar_grass_night_animation"
+        android:animation="@animator/appbar_grass_night"
         android:name="grass"/>
 
     <target
-        android:animation="@animator/appbar_hide_animation"
+        android:animation="@animator/appbar_hide"
         android:name="sun"/>
 
     <target
-        android:animation="@animator/appbar_show_animation"
+        android:animation="@animator/appbar_show"
         android:name="moon"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star1"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star2"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star3"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star4"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star5"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star6"/>
+
+    <target
+        android:animation="@animator/appbar_stars_night"
+        android:name="star7"/>
+
+    <target
+        android:animation="@animator/appbar_clouds_night"
+        android:name="clouds1"/>
+
+    <target
+        android:animation="@animator/appbar_clouds_night"
+        android:name="clouds2"/>
+
+    <target
+        android:animation="@animator/appbar_clouds_night"
+        android:name="clouds3"/>
+
+    <target
+        android:animation="@animator/appbar_clouds_night"
+        android:name="clouds4"/>
 </animated-vector>
