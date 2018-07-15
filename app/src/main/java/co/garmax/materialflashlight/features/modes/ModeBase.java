@@ -4,18 +4,27 @@ import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
+/**
+ * Module generate event for light volume according to implementation
+ * (torch, interval, microphone volume)
+ */
 public abstract class ModeBase {
 
-    private Subject<Boolean> lightStateSubject = PublishSubject.create();
-    private Subject<Integer> brightnessSubject = PublishSubject.create();
+    static int MAX_LIGHT_VOLUME = 100;
+    static int MIN_LIGHT_VOLUME = 0;
 
     /**
-     * Start mode. Light will turned on\off depends on mode implmentation.
+     * Volume of the light
+     */
+    private Subject<Integer> lightVolumeSubject = PublishSubject.create();
+
+    /**
+     * Start mode. Light will be turned on\off depends on mode implementation.
      */
     public abstract void start();
 
     /**
-     * Stop mode/ Light will turned off.
+     * Stop mode. Light will be turned off.
      */
     public abstract void stop();
 
@@ -26,30 +35,16 @@ public abstract class ModeBase {
     public abstract boolean checkPermissions();
 
     /**
-     * Stream of light state
+     * Stream of brightnessObservable volume
      */
-    public Observable<Boolean> lightState(){
-        return lightStateSubject;
+    public Observable<Integer> brightnessObservable(){
+        return lightVolumeSubject;
     }
 
     /**
-     * Stream of brightness volume
+     * Change brightnessObservable state
      */
-    public Observable<Integer> brightness(){
-        return brightnessSubject;
-    }
-
-    /**
-     * Change light state
-     */
-    protected void setLightState(boolean lightState){
-        lightStateSubject.onNext(lightState);
-    }
-
-    /**
-     * Change brightness state
-     */
-    protected void setBrightness(int percentage){
-        brightnessSubject.onNext(percentage);
+    void setBrightness(int percentage){
+        lightVolumeSubject.onNext(percentage);
     }
 }

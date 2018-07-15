@@ -14,31 +14,27 @@ public abstract class BaseCameraFlashModule extends ModuleBase {
 
     private Context context;
 
+    /**
+     * @param context Used for runtime permission request
+     */
     BaseCameraFlashModule(Context context) {
         this.context = context;
     }
 
-    @Override
-    public void turnOn(){
-        super.turnOn();
-    }
+    abstract void lightOn();
 
-    @Override
-    public void turnOff(){
-        super.turnOff();
-    }
-
-    @Override
-    public abstract void lightOn();
-
-    @Override
-    public abstract void lightOff();
+    abstract void lightOff();
 
     @Override
     public abstract boolean isAvailable();
 
     @Override
     public abstract boolean isSupported();
+
+    @Override
+    public void init() {
+        //Do nothing
+    }
 
     @Override
     public void setBrightness(int percentage) {
@@ -50,7 +46,7 @@ public abstract class BaseCameraFlashModule extends ModuleBase {
     }
 
     @Override
-    public boolean checkModulePermissions() {
+    public boolean checkPermissions() {
         if (ContextCompat.checkSelfPermission(context,
                 Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 

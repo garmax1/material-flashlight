@@ -19,6 +19,7 @@ import co.garmax.materialflashlight.features.modules.ScreenModule;
 import io.reactivex.Observable;
 import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.subjects.BehaviorSubject;
 
 public class LightManager {
 
@@ -36,31 +37,35 @@ public class LightManager {
     }
 
     private Context context;
-    private SettingsRepository settingsRepository;
     private Scheduler workerScheduler;
-    private Disposable disposableLightState;
+    private Disposable disposableModeState;
+    private final BehaviorSubject<Boolean> toggleStateObservable = BehaviorSubject.create();
 
     @Nullable
     private ModuleBase currentModule;
+    @Nullable
+    private ModeBase currentMode;
 
     public LightManager(Context context,
-                        Scheduler workerScheduler,
-                        SettingsRepository settingsRepository) {
+                        Scheduler workerScheduler) {
         this.workerScheduler = workerScheduler;
         this.context = context;
-        this.settingsRepository = settingsRepository;
     }
 
-    public Observable<Boolean> turnStateStream() {
-        return requireModule().turnState();
+    public Observable<Boolean> toggleStateStream() {
+        return toggleStateObservable;
     }
 
     public boolean isTurnedOn() {
-        return requireModule().isTurnedOn();
+        return toggleStateObservable.getValue() == Boolean.TRUE;
+    }
+
+    public boolean isSupported() {
+        return requireModule().isSupported();
     }
 
     public void turnOn() {
-        if(isTurnedOn()) return;
+        if (isTurnedOn()) return;
 
         // Check that the module is supported
         if (!requireModule().isSupported()) {
@@ -80,63 +85,97 @@ public class LightManager {
             return;
         }
 
-        // Check tht we have all permission for module
-        if(requireModule().checkPermissions()) {
-            // Listen state to start\stop foreground service
-            disposableLightState = turnStateStream().subscribe(isTurnedOn->{
-                if(isTurnedOn) {
-                    ForegroundService.startService(context);
-                } else {
-                    ForegroundService.stopService(context);
-                }
-            });
-            requireModule().turnOn();
+        // Check tht we have all permission for module and mode
+        if (!requireModule().checkPermissions() || !requireMode().checkPermissions()) {
+            return;
         }
+
+        // Listen mode light state and set to module
+        disposableModeState = requireMode()
+                .brightnessObservable()
+                .subscribe(brightness -> requireModule().setBrightness(brightness));
+
+        requireModule().init();
+        requireMode().start();
+
+        setToggleState(true);
+
+        WidgetProviderButton.updateWidgets(context);
+    }
+
+    private void setToggleState(boolean turnedOn) {
+        if (turnedOn) {
+            ForegroundService.startService(context);
+        } else {
+            ForegroundService.stopService(context);
+        }
+
+        toggleStateObservable.onNext(turnedOn);
     }
 
     public void turnOff() {
-        if (!requireModule().isTurnedOn()) return;
+        if (!isTurnedOn()) return;
 
-        requireModule().turnOff();
+        requireMode().stop();
+        requireModule().release();
+
+        setToggleState(false);
 
         // Free observable
-        disposableLightState.dispose();
+        disposableModeState.dispose();
 
+        WidgetProviderButton.updateWidgets(context);
     }
 
     @NonNull
     private ModuleBase requireModule() {
 
-        if(currentModule == null) {
-            setModule(settingsRepository.getModule());
-            setMode(settingsRepository.getMode());
+        if (currentModule == null) {
+            throw new IllegalStateException(Module.class.getName()
+                    + " not set in " + getClass().getName());
         }
 
         return currentModule;
     }
 
-    public void setMode(Mode mode) {
+    @NonNull
+    private ModeBase requireMode() {
 
-        ModeBase modeBase;
-
-        if (mode == Mode.MODE_INTERVAL_STROBE) {
-            modeBase = new IntervalStrobeMode(workerScheduler);
-        } else if(mode == Mode.MODE_SOS) {
-            modeBase = new SosMode(workerScheduler);
-        } else if(mode == Mode.MODE_SOUND_STROBE) {
-            modeBase = new SoundStrobeMode(context, workerScheduler);
-        } else {
-            modeBase = new TorchMode();
+        if (currentMode == null) {
+            throw new IllegalStateException(Mode.class.getName()
+                    + " not set in " + getClass().getName());
         }
 
-        requireModule().setMode(modeBase);
+        return currentMode;
+    }
+
+    public void setMode(Mode mode) {
+
+        boolean isWasTurnedOn = isTurnedOn();
+
+        turnOff();
+
+        if (mode == Mode.MODE_INTERVAL_STROBE) {
+            currentMode = new IntervalStrobeMode(workerScheduler);
+        } else if (mode == Mode.MODE_SOS) {
+            currentMode = new SosMode(workerScheduler);
+        } else if (mode == Mode.MODE_SOUND_STROBE) {
+            currentMode = new SoundStrobeMode(context, workerScheduler);
+        } else {
+            currentMode = new TorchMode();
+        }
+
+        // Restart if was before
+        if (isWasTurnedOn) {
+            turnOn();
+        }
     }
 
     public void setModule(Module module) {
-        // Turn off current module
-        if (currentModule != null && currentModule.isTurnedOn()) {
-            currentModule.turnOff();
-        }
+
+        boolean isWasTurnedOn = isTurnedOn();
+
+        turnOff();
 
         // Create new module
         if (module == Module.MODULE_SCREEN) {
@@ -149,7 +188,9 @@ public class LightManager {
             }
         }
 
-        // Set mode to new module
-        setMode(settingsRepository.getMode());
+        // Restart if was before
+        if (isWasTurnedOn) {
+            turnOn();
+        }
     }
 }

@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import co.garmax.materialflashlight.features.ForegroundService;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
+import co.garmax.materialflashlight.features.WidgetProviderButton;
 import co.garmax.materialflashlight.ui.PermissionsActivity;
 import co.garmax.materialflashlight.ui.RootActivity;
 import co.garmax.materialflashlight.ui.RootModule;
@@ -39,18 +40,24 @@ public abstract class AppModule {
     static LightManager lightManager(Context context,
                                      SettingsRepository settingsRepository,
                                      Scheduler workerScheduler) {
-        return new LightManager(context, workerScheduler, settingsRepository);
+        LightManager lightManager = new LightManager(context, workerScheduler);
+
+        lightManager.setModule(settingsRepository.getModule());
+        lightManager.setMode(settingsRepository.getMode());
+
+        return lightManager;
     }
 
     @ActivityScope
     @ContributesAndroidInjector(modules = RootModule.class)
     abstract RootActivity rootActivity();
 
-    @ActivityScope
     @ContributesAndroidInjector
     abstract PermissionsActivity permissionsActivity();
 
     @ContributesAndroidInjector
-    @ServiceScope
     abstract ForegroundService foregroundService();
+
+    @ContributesAndroidInjector
+    abstract WidgetProviderButton widgetProviderButton();
 }

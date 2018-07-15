@@ -21,20 +21,22 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.LightManager;
+import co.garmax.materialflashlight.features.SettingsRepository;
 import co.garmax.materialflashlight.features.modules.ScreenModule;
-import dagger.android.support.AndroidSupportInjection;
 
 public class LightFragment extends BaseFragment {
 
     @BindView(R.id.fab)
     FloatingActionButton fab;
 
-    @BindView(R.id.layout_container)
-    View layoutContainer;
+    @BindView(R.id.layout_root)
+    View layoutRoot;
 
     @Inject
     LightManager lightManager;
 
+    @Inject
+    SettingsRepository settingsRepository;
 
     /**
      * Receive and handle commands from screen module
@@ -44,7 +46,7 @@ public class LightFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             if (intent == null) return;
 
-            // Get brightness value
+            // Get brightnessObservable value
             int brightness = intent.getIntExtra(ScreenModule.EXTRA_BRIGHTNESS_PERCENT, 100);
 
             setBrightness(brightness);
@@ -52,9 +54,8 @@ public class LightFragment extends BaseFragment {
     };
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setImmersiveMode(true);
+    boolean isInImmersiveMode() {
+        return true;
     }
 
     @Override
@@ -86,6 +87,7 @@ public class LightFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
 
         ButterKnife.bind(this, view);
+        fab.setKeepScreenOn(settingsRepository.isKeepScreenOn());
     }
 
     @OnClick(R.id.fab)
@@ -95,10 +97,8 @@ public class LightFragment extends BaseFragment {
 
     private void setBrightness(int percent) {
 
-        int color = Color.argb(255 * percent / 100, 0, 0, 0);
+        int color = 255 * percent / 100;
 
-        // Change color when animation finished
-        //TODO if(mInitialized)
-        layoutContainer.setBackgroundColor(color);
+        layoutRoot.setBackgroundColor(Color.rgb(color, color, color));
     }
 }

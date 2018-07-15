@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -75,12 +76,6 @@ public class MainFragment extends BaseFragment {
     private Disposable disposableLightToggle;
     private ValueAnimator backgroundColorAnimation;
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setImmersiveMode(false);
-    }
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -105,10 +100,12 @@ public class MainFragment extends BaseFragment {
 
     private void setupLayout(@Nullable Bundle savedInstanceState) {
         // Handle toggle of the light
-        disposableLightToggle = lightManager.turnStateStream()
+        disposableLightToggle = lightManager.toggleStateStream()
                 .observeOn(postExecutionThread.getScheduler())
                 .subscribe(isLightOn -> setState(isLightOn, true));
 
+        layoutContent.setBackgroundColor(ContextCompat.getColor(requireContext(),
+                lightManager.isTurnedOn() ? R.color.green : R.color.colorPrimaryLight));
 
         if (savedInstanceState == null) {
             // Handle auto turn on
@@ -147,7 +144,10 @@ public class MainFragment extends BaseFragment {
             setState(lightManager.isTurnedOn(), false);
         }
 
-        switchKeepScreenOn.setChecked(settingsRepository.isKeepScreenOn());
+        boolean isKeepScreenOn = settingsRepository.isKeepScreenOn();
+
+        switchKeepScreenOn.setChecked(isKeepScreenOn);
+        fab.setKeepScreenOn(isKeepScreenOn);
         switchAutoTurnOn.setChecked(settingsRepository.isAutoTurnOn());
 
         radioSoundStrobe.setOnCheckedChangeListener(
@@ -182,7 +182,10 @@ public class MainFragment extends BaseFragment {
         );
 
         switchKeepScreenOn.setOnCheckedChangeListener(
-                (compoundButton, isChecked) -> settingsRepository.setKeepScreenOn(isChecked));
+                (compoundButton, isChecked) -> {
+                    settingsRepository.setKeepScreenOn(isChecked);
+                    fab.setKeepScreenOn(isChecked);
+                });
         switchAutoTurnOn.setOnCheckedChangeListener(
                 (compoundButton, isChecked) -> settingsRepository.setAutoTurnOn(isChecked));
         textVersion.setText(getString(R.string.text_version, BuildConfig.VERSION_NAME));
@@ -247,8 +250,8 @@ public class MainFragment extends BaseFragment {
     }
 
     private void animateBackground(@ColorRes int fromColorResId, @ColorRes int toColorResId) {
-        int colorFrom = getResources().getColor(fromColorResId);
-        int colorTo = getResources().getColor(toColorResId);
+        int colorFrom = ContextCompat.getColor(requireContext(), fromColorResId);
+        int colorTo = ContextCompat.getColor(requireContext(), toColorResId);
 
         if(backgroundColorAnimation != null && backgroundColorAnimation.isRunning()) {
             backgroundColorAnimation.cancel();

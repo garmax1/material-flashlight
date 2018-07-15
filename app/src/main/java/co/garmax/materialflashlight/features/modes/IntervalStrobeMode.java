@@ -26,19 +26,19 @@ public class IntervalStrobeMode extends ModeBase {
                 STROBE_PERIOD + DELAY_PERIOD,
                 TimeUnit.MILLISECONDS,
                 workerScheduler)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_PERIOD, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))
                 .delay(DELAY_PERIOD, TimeUnit.MILLISECONDS)
                 .subscribe(any -> {});
     }
 
     @Override
     public void stop() {
+        setBrightness(MIN_LIGHT_VOLUME);
         if(disposable != null) {
             disposable.dispose();
         }
-        setLightState(false);
     }
 
     @Override

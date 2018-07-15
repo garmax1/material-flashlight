@@ -7,12 +7,12 @@ public class TorchMode extends ModeBase {
 
     @Override
     public void start() {
-        setLightState(true);
+        setBrightness(MAX_LIGHT_VOLUME);
     }
 
     @Override
     public void stop() {
-        setLightState(false);
+        setBrightness(MIN_LIGHT_VOLUME);
     }
 
     @Override

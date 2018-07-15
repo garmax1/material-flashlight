@@ -16,15 +16,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/vc_appbar_night" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/bg_status_bar_gradient"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <co.garmax.materialflashlight.ui.views.MaskedScrollView
         android:layout_width="match_parent"
         android:layout_height="0dp"

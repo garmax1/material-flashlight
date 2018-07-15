@@ -3,6 +3,7 @@ package co.garmax.materialflashlight.features.modules;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.support.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,18 +20,8 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
 
     public CameraFlashModuleV16(Context context) {
         super(context);
-    }
 
-    @Override
-    public void turnOn() {
         initializeCamera();
-        super.turnOn();
-    }
-
-    @Override
-    public void turnOff() {
-        super.turnOff();
-        invalidateCamera();
     }
 
     @Override
@@ -60,13 +51,12 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
     }
 
     @Override
+    public void release() {
+        invalidateCamera();
+    }
+
+    @Override
     public boolean isAvailable() {
-
-        // Init camera if wasn't before
-        if(camera == null) {
-            initializeCamera();
-        }
-
         boolean result = false;
 
         try {
@@ -80,8 +70,10 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
             Timber.e("Camera instance not available", e);
         }
 
-        // Close camera instance after check
-        invalidateCamera();
+        // Release camera if we have problem with it
+        if(camera != null && !result) {
+            release();
+        }
 
         return result;
     }
@@ -104,6 +96,11 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
     private void initializeCamera() {
         camera = rearCamera();
 
+        if(camera == null) {
+            throw new IllegalStateException("Camera is null should check with isAvailable" +
+                    " before calling this method");
+        }
+
         // Hack for some android versions
         try {
             camera.setPreviewTexture(previewTexture);
@@ -122,6 +119,7 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
         return supported != null && supported.indexOf(value) >= 0;
     }
 
+    @Nullable
     private Camera rearCamera() {
         int cameraId = -1;
         Camera.CameraInfo info = new Camera.CameraInfo();

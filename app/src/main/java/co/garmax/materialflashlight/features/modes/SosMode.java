@@ -20,7 +20,7 @@ public class SosMode extends ModeBase {
             + 2 * DELAY_SHORT + 3 * STROBE_LONG
             + DELAY_LONG;
 
-    private Disposable disposable;
+    private Disposable disposableInterval;
     private Scheduler workerScheduler;
 
     public SosMode(Scheduler workerScheduler) {
@@ -29,45 +29,45 @@ public class SosMode extends ModeBase {
 
     @Override
     public void start() {
-        disposable = Observable.interval(0,
+        disposableInterval = Observable.interval(0,
                 SOS_PERIOD,
                 TimeUnit.MILLISECONDS,
                 workerScheduler)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_LONG, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 long
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 long
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_LONG, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 long
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 long
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_LONG, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 long
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 long
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(true))
+                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
                 .delay(STROBE_SHORT, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setLightState(false))// 1 short
+                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))// 1 short
                 .delay(DELAY_LONG, TimeUnit.MILLISECONDS)
                 .subscribe(any -> {
                 });
@@ -75,10 +75,10 @@ public class SosMode extends ModeBase {
 
     @Override
     public void stop() {
-        if (disposable != null) {
-            disposable.dispose();
+        setBrightness(MIN_LIGHT_VOLUME);
+        if (disposableInterval != null) {
+            disposableInterval.dispose();
         }
-        setLightState(false);
     }
 
     @Override

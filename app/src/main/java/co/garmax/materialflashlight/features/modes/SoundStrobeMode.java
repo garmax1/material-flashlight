@@ -27,7 +27,7 @@ public class SoundStrobeMode extends ModeBase {
 
     private Scheduler workerScheduler;
     private Context context;
-    private Disposable disposable;
+    private Disposable disposableInterval;
 
     // Audio staff
     private AudioRecord audioRecord;
@@ -65,26 +65,26 @@ public class SoundStrobeMode extends ModeBase {
         minAmplitude = 0;
         maxAmplitude = 0;
 
-        disposable = Observable.interval(0,
+        disposableInterval = Observable.interval(0,
                 CHECK_AMPLITUDE_PERIOD,
                 TimeUnit.MILLISECONDS,
                 workerScheduler)
                 .subscribe(any -> setBrightness(amplitudePercentage(getAmplitude())));
 
-        setLightState(true);
+        setBrightness(MAX_AMPLITUDE);
     }
 
     @Override
     public void stop() {
-        if (disposable != null) {
-            disposable.dispose();
+        setBrightness(MIN_LIGHT_VOLUME);
+
+        if (disposableInterval != null) {
+            disposableInterval.dispose();
         }
 
         if (audioRecord != null) {
             audioRecord.stop();
         }
-
-        setLightState(false);
     }
 
     private int getAmplitude() {

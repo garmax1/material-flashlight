@@ -14,6 +14,8 @@
     <string name="toast_module_not_supported">Выбранный модуль не поддерживается на данном устройстве, попробуйте другой.</string>
     <string name="toast_module_not_available">Выбранный модуль не может быть использован сейчас, попробуйте другой.</string>
 
+    <string name="text_toggle_light">Cвет</string>
+
     <string name="notification_light">Свет включён</string>
     <string name="notification_tap_to_turn_off">Нажмите, что бы отключить</string>
 

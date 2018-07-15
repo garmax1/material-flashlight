@@ -1,9 +1,11 @@
 package co.garmax.materialflashlight.ui;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import javax.inject.Inject;
 
@@ -35,6 +37,11 @@ public class RootActivity extends AppCompatActivity implements HasSupportFragmen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_root);
 
+        // Hide shadow in pre lollipop
+        if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            findViewById(R.id.image_status_mask).setVisibility(View.GONE);
+        }
+
         if (savedInstanceState == null) {
             replaceFragment(settingsRepository.isAutoTurnOn());
         }
@@ -44,7 +51,7 @@ public class RootActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onResume() {
         super.onResume();
 
-        disposable = lightManager.turnStateStream()
+        disposable = lightManager.toggleStateStream()
                 .subscribe(this::replaceFragment);
     }
 

@@ -24,6 +24,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".ui.RootActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,11 +32,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".ui.PermissionsActivity"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
         <service android:name=".features.ForegroundService" />
+
+        <receiver android:name=".features.WidgetProviderButton" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/widget_info_button" />
+        </receiver>
+        <service
+            android:name=".features.LightTileService"
+            android:icon="@drawable/ic_light_notification"
+            android:label="@string/text_toggle_light"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -14,6 +14,8 @@
     <string name="toast_module_not_supported">Selected module is not supported on this device, try another.</string>
     <string name="toast_module_not_available">Selected module can\'t be used now, try another.</string>
 
+    <string name="text_toggle_light">Light</string>
+
     <string name="notification_light">The light is on</string>
     <string name="notification_tap_to_turn_off">Tap to turn off</string>
 

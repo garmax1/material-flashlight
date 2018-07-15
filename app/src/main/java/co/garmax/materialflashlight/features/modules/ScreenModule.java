@@ -6,6 +6,7 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 
+import co.garmax.materialflashlight.ui.RootActivity;
 import timber.log.Timber;
 
 /**
@@ -25,12 +26,7 @@ public class ScreenModule extends ModuleBase {
     }
 
     @Override
-    public void turnOn() {
-        super.turnOn();
-
-        previousScreenBrightness = -1;
-        previousBrightnessMode = -1;
-
+    public void init() {
         // Save initial values
         try {
             previousScreenBrightness = Settings.System.getInt(context.getContentResolver(),
@@ -38,7 +34,7 @@ public class ScreenModule extends ModuleBase {
             previousBrightnessMode = Settings.System.getInt(context.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE);
         } catch (Settings.SettingNotFoundException e) {
-            Timber.e(e, "Can't read screen brightness settings");
+            Timber.e(e, "Can't read screen brightnessObservable settings");
         }
 
         // Set system values
@@ -47,32 +43,24 @@ public class ScreenModule extends ModuleBase {
         Settings.System.putInt(context.getContentResolver(),
                 Settings.System.SCREEN_BRIGHTNESS_MODE, Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
 
+        // Open activity with light screen
+        context.startActivity(new Intent(context, RootActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+
     }
 
     @Override
-    public void turnOff() {
-        super.turnOff();
-
+    public void release() {
         // Restore system values
-        if(previousScreenBrightness >= 0) {
+        if (previousScreenBrightness >= 0) {
             Settings.System.putInt(context.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS, previousScreenBrightness);
         }
 
-        if(previousBrightnessMode >= 0) {
+        if (previousBrightnessMode >= 0) {
             Settings.System.putInt(context.getContentResolver(),
                     Settings.System.SCREEN_BRIGHTNESS_MODE, previousBrightnessMode);
         }
-    }
-
-    @Override
-    public void lightOn() {
-        setBrightnessVolume(100);
-    }
-
-    @Override
-    public void lightOff() {
-        setBrightnessVolume(0);
     }
 
     @Override
@@ -95,7 +83,7 @@ public class ScreenModule extends ModuleBase {
     }
 
     @Override
-    public boolean checkModulePermissions() {
+    public boolean checkPermissions() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.System.canWrite(context)) {
 
             Intent grantIntent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
@@ -106,12 +94,5 @@ public class ScreenModule extends ModuleBase {
         }
 
         return true;
-    }
-
-    private void setBrightnessVolume(int percent) {
-        Intent intent = new Intent(ACTION_SCREEN_MODULE);
-        intent.putExtra(EXTRA_BRIGHTNESS_PERCENT, percent);
-
-        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 }
