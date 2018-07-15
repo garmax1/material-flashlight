@@ -1,4 +1,4 @@
-package co.garmax.materialflashlight.features;
+package co.garmax.materialflashlight.features.foreground;
 
 import android.app.PendingIntent;
 import android.app.Service;
@@ -11,6 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import javax.inject.Inject;
 
 import co.garmax.materialflashlight.R;
+import co.garmax.materialflashlight.features.LightManager;
 import dagger.android.AndroidInjection;
 
 /**
@@ -21,22 +22,14 @@ public class ForegroundService extends Service {
     private static final int NOTIFICATION_ID = 1;
     private static final String EXTRA_MODE = "extra_mode";
 
-    private static final int MODE_STOP = 0;
-    private static final int MODE_START = 1;
-    private static final int MODE_LIGHT_OFF = 2;
+    public static final int MODE_STOP = 0;
+    public static final int MODE_START = 1;
+    public static final int MODE_LIGHT_OFF = 2;
 
     @Inject
     LightManager lightManager;
 
-    public static void startService(Context context) {
-        context.startService(buildIntent(context, MODE_START));
-    }
-
-    public static void stopService(Context context) {
-        context.startService(buildIntent(context, MODE_STOP));
-    }
-
-    private static Intent buildIntent(Context context, int mode) {
+    public static Intent buildIntent(Context context, int mode) {
         Intent intent = new Intent(context, ForegroundService.class);
         intent.putExtra(EXTRA_MODE, mode);
 

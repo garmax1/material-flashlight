@@ -10,7 +10,7 @@ import co.garmax.materialflashlight.ui.PermissionsActivity;
 /**
  * Module for camera LED flashlight
  */
-public abstract class BaseCameraFlashModule extends ModuleBase {
+public abstract class BaseCameraFlashModule implements ModuleBase {
 
     private Context context;
 

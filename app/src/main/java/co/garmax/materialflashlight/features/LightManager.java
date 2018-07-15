@@ -1,43 +1,24 @@
 package co.garmax.materialflashlight.features;
 
-import android.content.Context;
-import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import co.garmax.materialflashlight.R;
-import co.garmax.materialflashlight.features.modes.IntervalStrobeMode;
+import co.garmax.materialflashlight.features.foreground.ForegroundServiceManager;
 import co.garmax.materialflashlight.features.modes.ModeBase;
-import co.garmax.materialflashlight.features.modes.SosMode;
-import co.garmax.materialflashlight.features.modes.SoundStrobeMode;
-import co.garmax.materialflashlight.features.modes.TorchMode;
-import co.garmax.materialflashlight.features.modules.CameraFlashModuleV16;
-import co.garmax.materialflashlight.features.modules.CameraFlashModuleV23;
 import co.garmax.materialflashlight.features.modules.ModuleBase;
-import co.garmax.materialflashlight.features.modules.ScreenModule;
+import co.garmax.materialflashlight.features.widget.WidgetManager;
+import co.garmax.materialflashlight.utils.ResourceProvider;
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
 
 public class LightManager {
 
-    public enum Module {
-        MODULE_SCREEN,
-        MODULE_CAMERA_FLASHLIGHT
-    }
+    private final ResourceProvider resourceProvider;
+    private final ForegroundServiceManager foregroundServiceManager;
+    private final WidgetManager widgetManager;
 
-    public enum Mode {
-        MODE_OFF,
-        MODE_SOUND_STROBE,
-        MODE_INTERVAL_STROBE,
-        MODE_TORCH,
-        MODE_SOS
-    }
-
-    private Context context;
-    private Scheduler workerScheduler;
     private Disposable disposableModeState;
     private final BehaviorSubject<Boolean> toggleStateObservable = BehaviorSubject.create();
 
@@ -46,10 +27,12 @@ public class LightManager {
     @Nullable
     private ModeBase currentMode;
 
-    public LightManager(Context context,
-                        Scheduler workerScheduler) {
-        this.workerScheduler = workerScheduler;
-        this.context = context;
+    public LightManager(WidgetManager widgetManager,
+                        ForegroundServiceManager foregroundServiceManager,
+                        ResourceProvider resourceProvider) {
+        this.widgetManager = widgetManager;
+        this.foregroundServiceManager = foregroundServiceManager;
+        this.resourceProvider = resourceProvider;
     }
 
     public Observable<Boolean> toggleStateStream() {
@@ -69,18 +52,14 @@ public class LightManager {
 
         // Check that the module is supported
         if (!requireModule().isSupported()) {
-            Toast.makeText(context,
-                    R.string.toast_module_not_supported,
-                    Toast.LENGTH_LONG).show();
+            resourceProvider.showToast(R.string.toast_module_not_supported);
 
             return;
         }
 
         // Check that the module is available
         if (!requireModule().isAvailable()) {
-            Toast.makeText(context,
-                    R.string.toast_module_not_available,
-                    Toast.LENGTH_LONG).show();
+            resourceProvider.showToast(R.string.toast_module_not_available);
 
             return;
         }
@@ -100,14 +79,14 @@ public class LightManager {
 
         setToggleState(true);
 
-        WidgetProviderButton.updateWidgets(context);
+        widgetManager.updateWidgets();
     }
 
     private void setToggleState(boolean turnedOn) {
         if (turnedOn) {
-            ForegroundService.startService(context);
+            foregroundServiceManager.startService();
         } else {
-            ForegroundService.stopService(context);
+            foregroundServiceManager.stopService();
         }
 
         toggleStateObservable.onNext(turnedOn);
@@ -124,14 +103,14 @@ public class LightManager {
         // Free observable
         disposableModeState.dispose();
 
-        WidgetProviderButton.updateWidgets(context);
+        widgetManager.updateWidgets();
     }
 
     @NonNull
     private ModuleBase requireModule() {
 
         if (currentModule == null) {
-            throw new IllegalStateException(Module.class.getName()
+            throw new IllegalStateException(ModuleBase.Module.class.getName()
                     + " not set in " + getClass().getName());
         }
 
@@ -142,28 +121,20 @@ public class LightManager {
     private ModeBase requireMode() {
 
         if (currentMode == null) {
-            throw new IllegalStateException(Mode.class.getName()
+            throw new IllegalStateException(ModeBase.Mode.class.getName()
                     + " not set in " + getClass().getName());
         }
 
         return currentMode;
     }
 
-    public void setMode(Mode mode) {
+    public void setMode(ModeBase mode) {
 
         boolean isWasTurnedOn = isTurnedOn();
 
         turnOff();
 
-        if (mode == Mode.MODE_INTERVAL_STROBE) {
-            currentMode = new IntervalStrobeMode(workerScheduler);
-        } else if (mode == Mode.MODE_SOS) {
-            currentMode = new SosMode(workerScheduler);
-        } else if (mode == Mode.MODE_SOUND_STROBE) {
-            currentMode = new SoundStrobeMode(context, workerScheduler);
-        } else {
-            currentMode = new TorchMode();
-        }
+        currentMode = mode;
 
         // Restart if was before
         if (isWasTurnedOn) {
@@ -171,22 +142,13 @@ public class LightManager {
         }
     }
 
-    public void setModule(Module module) {
+    public void setModule(ModuleBase module) {
 
         boolean isWasTurnedOn = isTurnedOn();
 
         turnOff();
 
-        // Create new module
-        if (module == Module.MODULE_SCREEN) {
-            currentModule = new ScreenModule(context);
-        } else if (module == Module.MODULE_CAMERA_FLASHLIGHT) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                currentModule = new CameraFlashModuleV23(context);
-            } else {
-                currentModule = new CameraFlashModuleV16(context);
-            }
-        }
+        currentModule = module;
 
         // Restart if was before
         if (isWasTurnedOn) {

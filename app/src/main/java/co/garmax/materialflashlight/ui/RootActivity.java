@@ -10,6 +10,7 @@ import javax.inject.Inject;
 import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
+import co.garmax.materialflashlight.features.modules.ModuleBase;
 import dagger.android.AndroidInjection;
 import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
@@ -58,7 +59,7 @@ public class RootActivity extends AppCompatActivity implements HasSupportFragmen
     private void replaceFragment(boolean isTunedOn) {
         // If module is screen and turned on
         Fragment fragment = (isTunedOn
-                && settingsRepository.getModule() == LightManager.Module.MODULE_SCREEN)
+                && settingsRepository.getModule() == ModuleBase.Module.MODULE_SCREEN)
                 ? new LightFragment() : new MainFragment();
 
         Fragment fragmentCurrent = getSupportFragmentManager()

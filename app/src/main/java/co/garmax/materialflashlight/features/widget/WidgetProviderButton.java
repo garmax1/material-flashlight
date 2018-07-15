@@ -1,9 +1,8 @@
-package co.garmax.materialflashlight.features;
+package co.garmax.materialflashlight.features.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +16,7 @@ import android.widget.RemoteViews;
 import javax.inject.Inject;
 
 import co.garmax.materialflashlight.R;
+import co.garmax.materialflashlight.features.LightManager;
 import dagger.android.AndroidInjection;
 import timber.log.Timber;
 
@@ -27,6 +27,9 @@ public class WidgetProviderButton extends AppWidgetProvider {
 
     @Inject
     LightManager lightManager;
+
+    @Inject
+    WidgetManager widgetManager;
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -68,19 +71,8 @@ public class WidgetProviderButton extends AppWidgetProvider {
                 lightManager.turnOn();
             }
 
-            updateWidgets(context);
+            widgetManager.updateWidgets();
         }
-    }
-
-    public static void updateWidgets(Context context) {
-        // Update widgets
-        int[] idsWidgetButton = AppWidgetManager.getInstance(context).
-                getAppWidgetIds(new ComponentName(context, WidgetProviderButton.class));
-
-        Intent intentButton = new Intent(context, WidgetProviderButton.class)
-                .setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE)
-                .putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, idsWidgetButton);
-        context.sendBroadcast(intentButton);
     }
 
     private PendingIntent getPendingSelfIntent(Context context, String action) {

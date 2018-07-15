@@ -15,7 +15,7 @@ public class CameraFlashModuleV23 extends BaseCameraFlashModule {
     private CameraManager cameraManager;
     private String cameraId;
 
-    public CameraFlashModuleV23(Context context) {
+    CameraFlashModuleV23(Context context) {
         super(context);
 
         cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);

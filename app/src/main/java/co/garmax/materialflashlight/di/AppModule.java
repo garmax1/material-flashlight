@@ -4,14 +4,19 @@ import android.content.Context;
 
 import javax.inject.Singleton;
 
-import co.garmax.materialflashlight.features.ForegroundService;
+import co.garmax.materialflashlight.features.foreground.ForegroundService;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
-import co.garmax.materialflashlight.features.WidgetProviderButton;
+import co.garmax.materialflashlight.features.foreground.ForegroundServiceManager;
+import co.garmax.materialflashlight.features.modes.ModeFactory;
+import co.garmax.materialflashlight.features.modules.ModuleFactory;
+import co.garmax.materialflashlight.features.widget.WidgetManager;
+import co.garmax.materialflashlight.features.widget.WidgetProviderButton;
 import co.garmax.materialflashlight.ui.PermissionsActivity;
 import co.garmax.materialflashlight.ui.RootActivity;
 import co.garmax.materialflashlight.ui.RootModule;
 import co.garmax.materialflashlight.utils.PostExecutionThread;
+import co.garmax.materialflashlight.utils.ResourceProvider;
 import dagger.Module;
 import dagger.Provides;
 import dagger.android.ContributesAndroidInjector;
@@ -35,15 +40,37 @@ public abstract class AppModule {
         return Schedulers.computation();
     }
 
+    @Provides
+    @Singleton
+    static WidgetManager widgetManager(Context context) {
+        return new WidgetManager(context);
+    }
+
+    @Provides
+    @Singleton
+    static ModuleFactory moduleFactory(Context context) {
+        return new ModuleFactory(context);
+    }
+
+    @Provides
+    @Singleton
+    static ModeFactory modeFactory(Context context, Scheduler workerScheduler) {
+        return new ModeFactory(workerScheduler, context);
+    }
+
     @Singleton
     @Provides
     static LightManager lightManager(Context context,
+                                     WidgetManager widgetManager,
                                      SettingsRepository settingsRepository,
-                                     Scheduler workerScheduler) {
-        LightManager lightManager = new LightManager(context, workerScheduler);
+                                     ModuleFactory moduleFactory,
+                                     ModeFactory modeFactory) {
+        LightManager lightManager = new LightManager(widgetManager,
+                new ForegroundServiceManager(context),
+                new ResourceProvider(context));
 
-        lightManager.setModule(settingsRepository.getModule());
-        lightManager.setMode(settingsRepository.getMode());
+        lightManager.setModule(moduleFactory.getModule(settingsRepository.getModule()));
+        lightManager.setMode(modeFactory.getMode(settingsRepository.getMode()));
 
         return lightManager;
     }

@@ -10,6 +10,14 @@ import io.reactivex.subjects.Subject;
  */
 public abstract class ModeBase {
 
+    public enum Mode {
+        MODE_OFF,
+        MODE_SOUND_STROBE,
+        MODE_INTERVAL_STROBE,
+        MODE_TORCH,
+        MODE_SOS
+    }
+
     static int MAX_LIGHT_VOLUME = 100;
     static int MIN_LIGHT_VOLUME = 0;
 

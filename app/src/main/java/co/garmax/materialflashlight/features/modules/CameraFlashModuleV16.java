@@ -18,7 +18,7 @@ public class CameraFlashModuleV16 extends BaseCameraFlashModule {
     private Camera camera;
     private SurfaceTexture previewTexture = new SurfaceTexture(0);
 
-    public CameraFlashModuleV16(Context context) {
+    CameraFlashModuleV16(Context context) {
         super(context);
 
         initializeCamera();

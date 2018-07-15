@@ -6,6 +6,9 @@ import android.preference.PreferenceManager;
 
 import javax.inject.Inject;
 
+import co.garmax.materialflashlight.features.modes.ModeBase;
+import co.garmax.materialflashlight.features.modules.ModuleBase;
+
 public class SettingsRepository {
 
     private static final String KEEP_SCREEN_ON = "keep_screen_on";
@@ -36,24 +39,24 @@ public class SettingsRepository {
         sharedPreferences.edit().putBoolean(AUTO_TURN_ON, isAutoTurnOn).apply();
     }
 
-    public LightManager.Mode getMode() {
-        String mode = sharedPreferences.getString(MODE, LightManager.Mode.MODE_TORCH.toString());
+    public ModeBase.Mode getMode() {
+        String mode = sharedPreferences.getString(MODE, ModeBase.Mode.MODE_TORCH.toString());
 
-        return LightManager.Mode.valueOf(mode);
+        return ModeBase.Mode.valueOf(mode);
     }
 
-    public void setMode(LightManager.Mode mode) {
+    public void setMode(ModeBase.Mode mode) {
         sharedPreferences.edit().putString(MODE, mode.name()).apply();
     }
 
-    public LightManager.Module getModule() {
+    public ModuleBase.Module getModule() {
         String module = sharedPreferences.getString(MODULE,
-                LightManager.Module.MODULE_CAMERA_FLASHLIGHT.toString());
+                ModuleBase.Module.MODULE_CAMERA_FLASHLIGHT.toString());
 
-        return LightManager.Module.valueOf(module);
+        return ModuleBase.Module.valueOf(module);
     }
 
-    public void setModule(LightManager.Module module) {
+    public void setModule(ModuleBase.Module module) {
         sharedPreferences.edit().putString(MODULE, module.name()).apply();
     }
 }

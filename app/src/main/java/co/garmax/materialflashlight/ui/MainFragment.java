@@ -2,7 +2,6 @@ package co.garmax.materialflashlight.ui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -27,14 +26,18 @@ import co.garmax.materialflashlight.BuildConfig;
 import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.SettingsRepository;
+import co.garmax.materialflashlight.features.modes.ModeBase;
+import co.garmax.materialflashlight.features.modes.ModeFactory;
+import co.garmax.materialflashlight.features.modules.ModuleBase;
+import co.garmax.materialflashlight.features.modules.ModuleFactory;
 import co.garmax.materialflashlight.utils.PostExecutionThread;
 import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
-import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_INTERVAL_STROBE;
-import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_SOS;
-import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_SOUND_STROBE;
-import static co.garmax.materialflashlight.features.LightManager.Mode.MODE_TORCH;
+import static co.garmax.materialflashlight.features.modes.ModeBase.Mode.MODE_INTERVAL_STROBE;
+import static co.garmax.materialflashlight.features.modes.ModeBase.Mode.MODE_SOS;
+import static co.garmax.materialflashlight.features.modes.ModeBase.Mode.MODE_SOUND_STROBE;
+import static co.garmax.materialflashlight.features.modes.ModeBase.Mode.MODE_TORCH;
 
 public class MainFragment extends BaseFragment {
 
@@ -65,10 +68,12 @@ public class MainFragment extends BaseFragment {
 
     @Inject
     SettingsRepository settingsRepository;
-
     @Inject
     LightManager lightManager;
-
+    @Inject
+    ModeFactory modeFactory;
+    @Inject
+    ModuleFactory moduleFactory;
     @Inject
     PostExecutionThread postExecutionThread;
 
@@ -173,12 +178,12 @@ public class MainFragment extends BaseFragment {
         );
         radioCameraFlashlight.setOnCheckedChangeListener(
                 (compoundButton, isChecked) -> {
-                    if (isChecked) changeModule(LightManager.Module.MODULE_CAMERA_FLASHLIGHT);
+                    if (isChecked) changeModule(ModuleBase.Module.MODULE_CAMERA_FLASHLIGHT);
                 }
         );
         radioScreen.setOnCheckedChangeListener(
                 (compoundButton, isChecked) -> {
-                    if (isChecked) changeModule(LightManager.Module.MODULE_SCREEN);
+                    if (isChecked) changeModule(ModuleBase.Module.MODULE_SCREEN);
                 }
         );
 
@@ -266,15 +271,15 @@ public class MainFragment extends BaseFragment {
         backgroundColorAnimation.start();
     }
 
-    private void changeMode(LightManager.Mode mode) {
+    private void changeMode(ModeBase.Mode mode) {
         settingsRepository.setMode(mode);
 
-        lightManager.setMode(mode);
+        lightManager.setMode(modeFactory.getMode(mode));
     }
 
-    private void changeModule(LightManager.Module module) {
+    private void changeModule(ModuleBase.Module module) {
         settingsRepository.setModule(module);
 
-        lightManager.setModule(module);
+        lightManager.setModule(moduleFactory.getModule(module));
     }
 }

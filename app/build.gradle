@@ -10,6 +10,8 @@ android {
         versionCode 20
         versionName "2.0"
         vectorDrawables.useSupportLibrary = true
+        resConfigs "en", "ru"
+        testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
     }
 
     signingConfigs {
@@ -65,4 +67,8 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.6.0'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+
+    // test
+    testImplementation 'junit:junit:4.12'
+    testImplementation "org.mockito:mockito-core:2.19.0"
 }

@@ -12,7 +12,7 @@ import timber.log.Timber;
 /**
  * Module for device screen
  */
-public class ScreenModule extends ModuleBase {
+public class ScreenModule implements ModuleBase {
 
     public static final String ACTION_SCREEN_MODULE = "action_screen_module";
     public static final String EXTRA_BRIGHTNESS_PERCENT = "extra_brightness_percent";
@@ -21,7 +21,7 @@ public class ScreenModule extends ModuleBase {
     private int previousScreenBrightness = -1;
     private int previousBrightnessMode = -1;
 
-    public ScreenModule(Context context) {
+    ScreenModule(Context context) {
         this.context = context;
     }
 
