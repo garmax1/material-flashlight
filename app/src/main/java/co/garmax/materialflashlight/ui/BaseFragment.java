@@ -1,8 +1,6 @@
 package co.garmax.materialflashlight.ui;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.View;
 
@@ -11,26 +9,14 @@ import dagger.android.support.AndroidSupportInjection;
 public class BaseFragment extends Fragment {
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public void onResume() {
+        super.onResume();
 
-        final View decorView = requireActivity().getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(visibility -> {
-            if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
-                if (isInImmersiveMode()) {
-                    setFullscreen();
-                } else {
-                    exitFullscreen();
-                }
-            }
-        });
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        final View decorView = requireActivity().getWindow().getDecorView();
-        decorView.setOnSystemUiVisibilityChangeListener(null);
+        if (isInImmersiveMode()) {
+            setFullscreen();
+        } else {
+            exitFullscreen();
+        }
     }
 
     boolean isInImmersiveMode() {

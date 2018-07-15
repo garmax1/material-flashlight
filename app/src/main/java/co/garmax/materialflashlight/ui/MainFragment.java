@@ -2,6 +2,7 @@ package co.garmax.materialflashlight.ui;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
@@ -87,7 +88,6 @@ public class MainFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         ButterKnife.bind(this, view);
 
         animatedDrawableDay = AnimatedVectorDrawableCompat
@@ -99,6 +99,7 @@ public class MainFragment extends BaseFragment {
     }
 
     private void setupLayout(@Nullable Bundle savedInstanceState) {
+
         // Handle toggle of the light
         disposableLightToggle = lightManager.toggleStateStream()
                 .observeOn(postExecutionThread.getScheduler())
