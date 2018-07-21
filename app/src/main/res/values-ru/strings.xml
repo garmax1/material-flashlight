@@ -16,6 +16,9 @@
 
     <string name="text_toggle_light">Cвет</string>
 
+    <string name="channel_name">Свет</string>
+    <string name="channel_description">Свет</string>
+
     <string name="notification_light">Свет включён</string>
     <string name="notification_tap_to_turn_off">Нажмите, что бы отключить</string>
 
