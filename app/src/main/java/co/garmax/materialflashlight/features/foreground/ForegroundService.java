@@ -1,11 +1,15 @@
 package co.garmax.materialflashlight.features.foreground;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import javax.inject.Inject;
@@ -21,6 +25,7 @@ public class ForegroundService extends Service {
 
     private static final int NOTIFICATION_ID = 1;
     private static final String EXTRA_MODE = "extra_mode";
+    private static final String CHANNEL_ID = "MaterialFlashLight.Notification.Channel";
 
     public static final int MODE_STOP = 0;
     public static final int MODE_START = 1;
@@ -79,7 +84,8 @@ public class ForegroundService extends Service {
 
     // Start foreground service with notification
     private void startForeground() {
-        NotificationCompat.Builder notifyBuilder = new NotificationCompat.Builder(getApplicationContext(), "");
+        NotificationCompat.Builder notifyBuilder =
+                new NotificationCompat.Builder(getApplicationContext(), CHANNEL_ID);
         notifyBuilder.setOngoing(true)
                 .setSmallIcon(R.drawable.ic_light_notification)
                 .setWhen(System.currentTimeMillis())
@@ -93,6 +99,28 @@ public class ForegroundService extends Service {
                 PendingIntent.FLAG_CANCEL_CURRENT);
         notifyBuilder.setContentIntent(pendingIntent);
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            createNotificationChannel();
+        }
+
         startForeground(NOTIFICATION_ID, notifyBuilder.build());
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        CharSequence name = getString(R.string.channel_name);
+        String description = getString(R.string.channel_description);
+        int importance = NotificationManager.IMPORTANCE_DEFAULT;
+        NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+        channel.setDescription(description);
+        // Register the channel with the system; you can't change the importance
+        // or other notification behaviors after this
+        NotificationManager notificationManager = getSystemService(NotificationManager.class);
+
+        if(notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
