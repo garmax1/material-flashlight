@@ -12,8 +12,8 @@ import co.garmax.materialflashlight.features.modules.ModuleBase;
 public class SettingsRepository {
 
     private static final String KEEP_SCREEN_ON = "keep_screen_on";
-    private static final String MODE = "mode";
-    private static final String MODULE = "module";
+    private static final String MODE = "mode_name";
+    private static final String MODULE = "module_name";
     private static final String AUTO_TURN_ON = "auto_turn_on";
 
     private SharedPreferences sharedPreferences;
