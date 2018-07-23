@@ -3,6 +3,7 @@ package co.garmax.materialflashlight.features.modules;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
 import android.hardware.camera2.CameraManager;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -19,9 +20,19 @@ public class CameraFlashModuleV23 extends BaseCameraFlashModule {
         super(context);
 
         cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
+
+        if(cameraManager == null) {
+            Timber.e("Can't initialize CameraManager");
+            return;
+        }
+
         try {
-            if (cameraManager != null) {
-                cameraId = cameraManager.getCameraIdList()[0];
+            for (String cameraId : cameraManager.getCameraIdList()) {
+                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
+                Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                if (facing != null && facing.equals(CameraCharacteristics.LENS_FACING_BACK)) {
+                    this.cameraId = cameraId;
+                }
             }
         } catch (CameraAccessException e) {
             Timber.e(e, "Can't get cameras list");
