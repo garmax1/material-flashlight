@@ -55,7 +55,7 @@ public class LightTileService extends TileService {
 
     private void setCurrentState(int state) {
         Tile tile = getQsTile();
-        tile.setState(state);
+        getQsTile().setState(state);
         switch (state) {
             case Tile.STATE_ACTIVE:
                 tile.setIcon(Icon.createWithResource(getApplicationContext(),

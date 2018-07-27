@@ -7,7 +7,7 @@ import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.foreground.ForegroundServiceManager;
 import co.garmax.materialflashlight.features.modes.ModeBase;
 import co.garmax.materialflashlight.features.modules.ModuleBase;
-import co.garmax.materialflashlight.features.widget.WidgetManager;
+import co.garmax.materialflashlight.widget.WidgetManager;
 import co.garmax.materialflashlight.utils.ResourceProvider;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
@@ -20,7 +20,8 @@ public class LightManager {
     private final WidgetManager widgetManager;
 
     private Disposable disposableModeState;
-    private final BehaviorSubject<Boolean> toggleStateObservable = BehaviorSubject.create();
+    private final BehaviorSubject<Boolean> toggleStateObservable
+            = BehaviorSubject.createDefault(Boolean.FALSE);
 
     @Nullable
     private ModuleBase currentModule;
