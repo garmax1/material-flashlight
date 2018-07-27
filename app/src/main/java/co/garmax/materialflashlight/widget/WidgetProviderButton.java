@@ -1,4 +1,4 @@
-package co.garmax.materialflashlight.features.widget;
+package co.garmax.materialflashlight.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;

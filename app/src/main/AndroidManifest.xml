@@ -39,7 +39,7 @@
 
         <service android:name=".features.foreground.ForegroundService" />
 
-        <receiver android:name=".features.widget.WidgetProviderButton" >
+        <receiver android:name=".widget.WidgetProviderButton" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

@@ -114,11 +114,6 @@ public class MainFragment extends BaseFragment {
                 lightManager.isTurnedOn() ? R.color.green : R.color.colorPrimaryLight));
 
         if (savedInstanceState == null) {
-            // Handle auto turn on
-            if(settingsRepository.isAutoTurnOn()) {
-                lightManager.turnOn();
-            }
-
             // Set module
             switch (settingsRepository.getModule()) {
                 case MODULE_CAMERA_FLASHLIGHT:
