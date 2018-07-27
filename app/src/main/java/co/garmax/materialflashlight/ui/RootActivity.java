@@ -38,6 +38,11 @@ public class RootActivity extends AppCompatActivity implements HasSupportFragmen
 
         if (savedInstanceState == null) {
             replaceFragment(settingsRepository.isAutoTurnOn());
+
+            // Handle auto turn on
+            if (settingsRepository.isAutoTurnOn()) {
+                lightManager.turnOn();
+            }
         }
     }
 
