@@ -13,7 +13,7 @@ import co.garmax.materialflashlight.features.LightManager;
 import co.garmax.materialflashlight.features.foreground.ForegroundServiceManager;
 import co.garmax.materialflashlight.features.modes.ModeBase;
 import co.garmax.materialflashlight.features.modules.ModuleBase;
-import co.garmax.materialflashlight.features.widget.WidgetManager;
+import co.garmax.materialflashlight.widget.WidgetManager;
 import co.garmax.materialflashlight.utils.ResourceProvider;
 import io.reactivex.Observable;
 import io.reactivex.android.plugins.RxAndroidPlugins;
