@@ -74,6 +74,16 @@ public class LightFragment extends BaseFragment {
         LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(broadcastReceiver);
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // Turn off light because screen not visible and for this mode it makes no sense
+        if(lightManager.isTurnedOn()) {
+            lightManager.turnOff();
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
