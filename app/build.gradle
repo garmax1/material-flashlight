@@ -7,8 +7,8 @@ android {
         applicationId "co.garmax.materialflashlight"
         minSdkVersion 16
         targetSdkVersion 28
-        versionCode 25
-        versionName "2.3"
+        versionCode 26
+        versionName "2.4"
         vectorDrawables.useSupportLibrary = true
         resConfigs "en", "ru"
         testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
@@ -70,5 +70,5 @@ dependencies {
 
     // test
     testImplementation 'junit:junit:4.12'
-    testImplementation "org.mockito:mockito-core:2.19.0"
+    testImplementation 'org.mockito:mockito-core:2.20.0'
 }
