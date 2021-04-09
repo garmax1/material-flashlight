@@ -3,7 +3,8 @@ package co.garmax.materialflashlight.features.modules;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.support.v4.content.ContextCompat;
+
+import androidx.core.content.ContextCompat;
 
 import co.garmax.materialflashlight.ui.PermissionsActivity;
 

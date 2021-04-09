@@ -1,8 +1,9 @@
 package co.garmax.materialflashlight.utils;
 
 import android.content.Context;
-import android.support.annotation.StringRes;
 import android.widget.Toast;
+
+import androidx.annotation.StringRes;
 
 /**
  * Used to encapsulate resource retrieving with context

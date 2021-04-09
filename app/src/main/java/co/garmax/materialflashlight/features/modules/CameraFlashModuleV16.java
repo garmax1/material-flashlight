@@ -3,7 +3,8 @@ package co.garmax.materialflashlight.features.modules;
 import android.content.Context;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.util.List;

@@ -4,7 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.provider.Settings;
-import android.support.v4.content.LocalBroadcastManager;
+
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import co.garmax.materialflashlight.ui.RootActivity;
 import timber.log.Timber;

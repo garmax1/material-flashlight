@@ -1,14 +1,14 @@
 package co.garmax.materialflashlight.features;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import co.garmax.materialflashlight.R;
 import co.garmax.materialflashlight.features.foreground.ForegroundServiceManager;
 import co.garmax.materialflashlight.features.modes.ModeBase;
 import co.garmax.materialflashlight.features.modules.ModuleBase;
-import co.garmax.materialflashlight.widget.WidgetManager;
 import co.garmax.materialflashlight.utils.ResourceProvider;
+import co.garmax.materialflashlight.widget.WidgetManager;
 import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.subjects.BehaviorSubject;
