@@ -1,79 +1,62 @@
-package co.garmax.materialflashlight.features.modules;
+package co.garmax.materialflashlight.features.modules
 
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraCharacteristics;
-import android.hardware.camera2.CameraManager;
-import android.os.Build;
-
-import androidx.annotation.RequiresApi;
-
-import timber.log.Timber;
+import android.content.Context
+import android.content.pm.PackageManager
+import android.hardware.camera2.CameraAccessException
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
+import android.os.Build
+import androidx.annotation.RequiresApi
+import timber.log.Timber
 
 @RequiresApi(api = Build.VERSION_CODES.M)
-public class CameraFlashModuleV23 extends BaseCameraFlashModule {
+class CameraFlashModuleV23(context: Context) : BaseCameraFlashModule(context) {
 
-    private CameraManager cameraManager;
-    private String cameraId;
+    override val isAvailable get() = cameraManager != null && cameraId != null
 
-    CameraFlashModuleV23(Context context) {
-        super(context);
+    override val isSupported get() = context.packageManager.hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)
 
-        cameraManager = (CameraManager) getContext().getSystemService(Context.CAMERA_SERVICE);
+    private var cameraManager: CameraManager? = null
 
-        if(cameraManager == null) {
-            Timber.e("Can't initialize CameraManager");
-            return;
-        }
+    private var cameraId: String? = null
 
-        try {
-            for (String cameraId : cameraManager.getCameraIdList()) {
-                CameraCharacteristics characteristics = cameraManager.getCameraCharacteristics(cameraId);
-                Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing.equals(CameraCharacteristics.LENS_FACING_BACK)) {
-                    this.cameraId = cameraId;
+    init {
+        cameraManager = context.getSystemService(Context.CAMERA_SERVICE) as CameraManager?
+
+        cameraManager?.let {
+            try {
+                it.cameraIdList.forEach { id ->
+                    val characteristics = it.getCameraCharacteristics(id)
+                    val facing = characteristics.get(CameraCharacteristics.LENS_FACING)
+                    if (facing == CameraCharacteristics.LENS_FACING_BACK) {
+                        this.cameraId = id
+                    }
                 }
+            } catch (e: CameraAccessException) {
+                Timber.e(e, "Can't get cameras list")
             }
-        } catch (CameraAccessException e) {
-            Timber.e(e, "Can't get cameras list");
+        } ?: run {
+            Timber.e("Can't initialize CameraManager")
         }
     }
 
-    @Override
-    public void lightOn() {
+    override fun lightOn() {
         try {
-            cameraManager.setTorchMode(cameraId, true);
-        } catch (CameraAccessException e) {
-            Timber.e(e, "Can't turn on flashlight");
+            cameraId?.let { cameraManager?.setTorchMode(it, true) }
+        } catch (e: CameraAccessException) {
+            Timber.e(e, "Can't turn on flashlight")
         }
     }
 
-    @Override
-    public void lightOff() {
+    override fun lightOff() {
         try {
-            if (cameraManager != null && cameraId != null) {
-                cameraManager.setTorchMode(cameraId, false);
-            }
-        } catch (CameraAccessException e) {
-            Timber.e(e, "Can't turn off flashlight");
+            cameraId?.let { cameraManager?.setTorchMode(it, false) }
+        } catch (e: CameraAccessException) {
+            Timber.e(e, "Can't turn off flashlight")
         }
     }
 
-    @Override
-    public void release() {
+    override fun release() {
         // Do nothing
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return cameraManager != null && cameraId != null;
-    }
-
-    @Override
-    public boolean isSupported() {
-        return getContext()
-                .getPackageManager()
-                .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
     }
 }

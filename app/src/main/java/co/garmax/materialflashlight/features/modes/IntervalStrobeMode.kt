@@ -1,48 +1,43 @@
-package co.garmax.materialflashlight.features.modes;
+package co.garmax.materialflashlight.features.modes
 
-import java.util.concurrent.TimeUnit;
-
-import io.reactivex.Observable;
-import io.reactivex.Scheduler;
-import io.reactivex.disposables.Disposable;
+import io.reactivex.Observable
+import io.reactivex.Scheduler
+import io.reactivex.disposables.Disposable
+import java.util.concurrent.TimeUnit
 
 /**
  * Interrupted light with equal interval
  */
-public class IntervalStrobeMode extends ModeBase {
+class IntervalStrobeMode(private val workerScheduler: Scheduler) : ModeBase() {
+    private var disposable: Disposable? = null
 
-    private static final int STROBE_PERIOD = 300;
-    private static final int DELAY_PERIOD = 200;
-    private Disposable disposable;
-    private Scheduler workerScheduler;
-
-    public IntervalStrobeMode(Scheduler workerScheduler) {
-        this.workerScheduler = workerScheduler;
+    override fun start() {
+        disposable = Observable.interval(
+            0,
+            (STROBE_PERIOD + DELAY_PERIOD).toLong(),
+            TimeUnit.MILLISECONDS,
+            workerScheduler
+        )
+            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .delay(STROBE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) }
+            .delay(DELAY_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            .subscribe { any: Long? -> }
     }
 
-    @Override
-    public void start() {
-        disposable = Observable.interval(0,
-                STROBE_PERIOD + DELAY_PERIOD,
-                TimeUnit.MILLISECONDS,
-                workerScheduler)
-                .doOnNext(any -> setBrightness(MAX_LIGHT_VOLUME))
-                .delay(STROBE_PERIOD, TimeUnit.MILLISECONDS)
-                .doOnNext(any -> setBrightness(MIN_LIGHT_VOLUME))
-                .delay(DELAY_PERIOD, TimeUnit.MILLISECONDS)
-                .subscribe(any -> {});
-    }
-
-    @Override
-    public void stop() {
-        setBrightness(MIN_LIGHT_VOLUME);
-        if(disposable != null) {
-            disposable.dispose();
+    override fun stop() {
+        setBrightness(MIN_LIGHT_VOLUME)
+        if (disposable != null) {
+            disposable!!.dispose()
         }
     }
 
-    @Override
-    public boolean checkPermissions() {
-        return true;
+    override fun checkPermissions(): Boolean {
+        return true
+    }
+
+    companion object {
+        private const val STROBE_PERIOD = 300
+        private const val DELAY_PERIOD = 200
     }
 }

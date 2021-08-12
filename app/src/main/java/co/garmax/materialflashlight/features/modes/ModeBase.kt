@@ -1,58 +1,56 @@
-package co.garmax.materialflashlight.features.modes;
+package co.garmax.materialflashlight.features.modes
 
-import io.reactivex.Observable;
-import io.reactivex.subjects.PublishSubject;
-import io.reactivex.subjects.Subject;
+import io.reactivex.Observable
+import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.Subject
 
 /**
  * Module generate event for light volume according to implementation
  * (torch, interval, microphone volume)
  */
-public abstract class ModeBase {
+abstract class ModeBase {
 
-    public enum Mode {
-        MODE_OFF,
-        MODE_SOUND_STROBE,
-        MODE_INTERVAL_STROBE,
-        MODE_TORCH,
-        MODE_SOS
+    enum class Mode {
+        MODE_OFF, MODE_SOUND_STROBE, MODE_INTERVAL_STROBE, MODE_TORCH, MODE_SOS
     }
-
-    static int MAX_LIGHT_VOLUME = 100;
-    static int MIN_LIGHT_VOLUME = 0;
 
     /**
      * Volume of the light
      */
-    private Subject<Integer> lightVolumeSubject = PublishSubject.create();
+    private val lightVolumeSubject: Subject<Int> = PublishSubject.create()
 
     /**
      * Start mode. Light will be turned on\off depends on mode implementation.
      */
-    public abstract void start();
+    abstract fun start()
 
     /**
      * Stop mode. Light will be turned off.
      */
-    public abstract void stop();
+    abstract fun stop()
 
     /**
      * Check runtime permission for the mode
      * @return true if all needed permission granted, false - if permission requested
      */
-    public abstract boolean checkPermissions();
+    abstract fun checkPermissions(): Boolean
 
     /**
      * Stream of brightnessObservable volume
      */
-    public Observable<Integer> brightnessObservable(){
-        return lightVolumeSubject;
+    fun brightnessObservable(): Observable<Int> {
+        return lightVolumeSubject
     }
 
     /**
      * Change brightnessObservable state
      */
-    void setBrightness(int percentage){
-        lightVolumeSubject.onNext(percentage);
+    fun setBrightness(percentage: Int) {
+        lightVolumeSubject.onNext(percentage)
+    }
+
+    companion object {
+        const val MAX_LIGHT_VOLUME = 100
+        const val MIN_LIGHT_VOLUME = 0
     }
 }

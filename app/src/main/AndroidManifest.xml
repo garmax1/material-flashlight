@@ -25,7 +25,8 @@
         android:screenOrientation="sensorPortrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.RootActivity"
+        <activity
+            android:name=".ui.root.RootActivity"
             android:launchMode="singleTask"
             android:screenOrientation="sensorPortrait">
             <intent-filter>

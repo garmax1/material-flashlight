@@ -1,151 +1,121 @@
-package co.garmax.materialflashlight.features.modules;
+package co.garmax.materialflashlight.features.modules
 
-import android.content.Context;
-import android.graphics.SurfaceTexture;
-import android.hardware.Camera;
-
-import androidx.annotation.Nullable;
-
-import java.io.IOException;
-import java.util.List;
-
-import timber.log.Timber;
+import android.content.Context
+import android.graphics.SurfaceTexture
+import android.hardware.Camera
+import android.hardware.Camera.CameraInfo
+import timber.log.Timber
+import java.io.IOException
 
 /**
  * Module for camera LED flashlight
  */
-public class CameraFlashModuleV16 extends BaseCameraFlashModule {
+class CameraFlashModuleV16(context: Context) : BaseCameraFlashModule(context) {
 
-    private Camera camera;
-    private SurfaceTexture previewTexture = new SurfaceTexture(0);
-
-    CameraFlashModuleV16(Context context) {
-        super(context);
-
-        initializeCamera();
-    }
-
-    @Override
-    public void lightOn() {
-        Camera.Parameters params = camera.getParameters();
-
-        List<String> flashModes = params.getSupportedFlashModes();
-
-        if (isParameterSupported(Camera.Parameters.FLASH_MODE_TORCH, flashModes)) {
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-        } else if (isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes)) {
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_ON);
-        }
-
-        camera.setParameters(params);
-        camera.startPreview();
-    }
-
-    @Override
-    public void lightOff() {
-        if(camera != null) {
-            Camera.Parameters params = camera.getParameters();
-            params.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-            camera.setParameters(params);
-            camera.stopPreview();
-        }
-    }
-
-    @Override
-    public void release() {
-        invalidateCamera();
-    }
-
-    @Override
-    public boolean isAvailable() {
-        boolean result = false;
-
-        try {
-            if (camera != null) {
-                // Try to get parameters to check if instance is available
-                camera.getParameters();
-
-                result = true;
+    override val isAvailable: Boolean
+        get() {
+            var result = false
+            try {
+                if (camera != null) {
+                    // Try to get parameters to check if instance is available
+                    camera!!.parameters
+                    result = true
+                }
+            } catch (e: Exception) {
+                Timber.e(e, "Camera instance not available")
             }
-        } catch (Exception e) {
-            Timber.e("Camera instance not available", e);
+
+            // Release camera if we have problem with it
+            if (camera != null && !result) release()
+
+            return result
         }
 
-        // Release camera if we have problem with it
-        if(camera != null && !result) {
-            release();
+    override val isSupported
+        get() = if (isAvailable) {
+            val flashModes = camera?.parameters?.supportedFlashModes
+            isParameterSupported(
+                Camera.Parameters.FLASH_MODE_TORCH,
+                flashModes
+            ) || isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes)
+        } else {
+            true
         }
 
-        return result;
+    private var camera: Camera? = null
+
+    private var previewTexture: SurfaceTexture? = SurfaceTexture(0)
+
+    init {
+        initializeCamera()
     }
 
-    @Override
-    public boolean isSupported() {
-        // If flash supported by camera
-        if (isAvailable()) {
-            List<String> flashModes = camera.getParameters().getSupportedFlashModes();
-            return isParameterSupported(Camera.Parameters.FLASH_MODE_TORCH, flashModes) ||
-                    isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes);
+    override fun lightOn() {
+        val params = camera?.parameters
+        val flashModes = params?.supportedFlashModes
+        if (isParameterSupported(Camera.Parameters.FLASH_MODE_TORCH, flashModes)) {
+            params?.flashMode = Camera.Parameters.FLASH_MODE_TORCH
+        } else if (isParameterSupported(Camera.Parameters.FLASH_MODE_ON, flashModes)) {
+            params?.flashMode = Camera.Parameters.FLASH_MODE_ON
         }
-        // Return true and will check by flash modes
-        // because hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH) do not work correctly
-        else {
-            return true;
+        camera?.parameters = params
+        camera?.startPreview()
+    }
+
+    override fun lightOff() {
+        camera?.let {
+            val params = it.parameters
+            params.flashMode = Camera.Parameters.FLASH_MODE_OFF
+            it.parameters = params
+            it.stopPreview()
         }
     }
 
-    private void initializeCamera() {
-        camera = rearCamera();
+    override fun release() {
+        invalidateCamera()
+    }
 
-        if(camera == null) {
-            throw new IllegalStateException("Camera is null should check with isAvailable" +
-                    " before calling this method");
-        }
+    private fun initializeCamera() {
+        camera = rearCamera()
 
         // Hack for some android versions
         try {
-            camera.setPreviewTexture(previewTexture);
-        } catch (IOException e) {
-            Timber.e("Can't set preview texture");
+            camera?.setPreviewTexture(previewTexture)
+        } catch (e: IOException) {
+            Timber.e("Can't set preview texture")
         }
     }
 
-    private void invalidateCamera() {
-        camera.release();
-        camera = null;
-        previewTexture = null;
+    private fun invalidateCamera() {
+        camera?.release()
+        camera = null
+        previewTexture = null
     }
 
-    private Boolean isParameterSupported(String value, List<String> supported) {
-        return supported != null && supported.indexOf(value) >= 0;
+    private fun isParameterSupported(value: String, supported: List<String>?): Boolean {
+        return supported != null && supported.indexOf(value) >= 0
     }
 
-    @Nullable
-    private Camera rearCamera() {
-        int cameraId = -1;
-        Camera.CameraInfo info = new Camera.CameraInfo();
-
-        for (int i = 0; i < Camera.getNumberOfCameras() - 1; i++) {
-            Camera.getCameraInfo(i, info);
-
-            if (info.facing == Camera.CameraInfo.CAMERA_FACING_BACK) {
-                cameraId = i;
-                break;
+    private fun rearCamera(): Camera? {
+        var cameraId = -1
+        val info = CameraInfo()
+        for (i in 0 until Camera.getNumberOfCameras() - 1) {
+            Camera.getCameraInfo(i, info)
+            if (info.facing == CameraInfo.CAMERA_FACING_BACK) {
+                cameraId = i
+                break
             }
         }
-
         if (cameraId < 0) {
-            Timber.w("Wrong camera id %d", cameraId);
-            return null;
+            Timber.w("Wrong camera id $cameraId")
+            return null
         }
 
         try {
-            return Camera.open(cameraId);
-        } catch (Exception e){
-            Timber.e(e, "Exception when open camera %d", cameraId);
+            return Camera.open(cameraId)
+        } catch (e: Exception) {
+            Timber.e(e, "Exception when open camera $cameraId")
         }
-
-        return null;
+        return null
     }
-
 }

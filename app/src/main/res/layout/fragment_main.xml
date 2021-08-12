@@ -8,8 +8,9 @@
 
     <ImageView
         android:id="@+id/image_appbar"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="@dimen/app_bar_height"
+        android:contentDescription="@null"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -27,17 +28,17 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:layout_marginEnd="@dimen/activity_horizontal_margin"
             android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/bg_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_large">
+                android:padding="16dp">
 
                 <LinearLayout
                     android:id="@+id/layout_keep_screen_on"
@@ -66,7 +67,7 @@
                     android:id="@+id/layout_auto_turn_on"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/margin_normal"
+                    android:layout_marginTop="16dp"
                     android:background="?attr/selectableItemBackground"
                     android:clickable="true"
                     android:gravity="center_vertical"
@@ -87,82 +88,71 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
+            <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/bg_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_large"
+                android:padding="16dp"
                 android:textStyle="bold">
 
-                <RadioGroup
+                <RadioButton
+                    android:id="@+id/radio_camera_flashlight"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_camera_flashlight" />
 
-                    <RadioButton
-                        android:id="@+id/radio_camera_flashlight"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_camera_flashlight" />
+                <RadioButton
+                    android:id="@+id/radio_screen"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/text_screen" />
 
-                    <RadioButton
-                        android:id="@+id/radio_screen"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/text_screen"/>
+            </RadioGroup>
 
-                </RadioGroup>
-            </LinearLayout>
-
-            <LinearLayout
+            <RadioGroup
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/margin_large"
+                android:layout_marginTop="16dp"
                 android:background="@drawable/bg_rounded"
                 android:orientation="vertical"
-                android:padding="@dimen/margin_large">
+                android:padding="16dp">
 
-                <RadioGroup
+                <RadioButton
+                    android:id="@+id/radio_torch"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_torch" />
 
-                    <RadioButton
-                        android:id="@+id/radio_torch"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_torch" />
+                <RadioButton
+                    android:id="@+id/radio_interval_strobe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/text_interval_strobe" />
 
-                    <RadioButton
-                        android:id="@+id/radio_interval_strobe"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:checked="true"
-                        android:text="@string/text_interval_strobe" />
+                <RadioButton
+                    android:id="@+id/radio_sound_strobe"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_sound_strobe" />
 
-                    <RadioButton
-                        android:id="@+id/radio_sound_strobe"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_sound_strobe" />
+                <RadioButton
+                    android:id="@+id/radio_sos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/text_sos" />
 
-                    <RadioButton
-                        android:id="@+id/radio_sos"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="@string/text_sos" />
-
-                </RadioGroup>
-            </LinearLayout>
+            </RadioGroup>
 
             <TextView
                 android:id="@+id/text_version"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/margin_large"
-                android:layout_marginTop="@dimen/margin_large" />
+                android:layout_marginVertical="16dp" />
 
         </LinearLayout>
 
@@ -172,10 +162,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_large"
+        android:layout_margin="16dp"
+        android:layout_marginHorizontal="8dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
+        android:contentDescription="@null"
         app:fabSize="normal"
         app:layout_anchor="@id/layout_content"
         app:layout_anchorGravity="bottom|end"
