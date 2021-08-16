@@ -25,7 +25,8 @@
         android:screenOrientation="sensorPortrait"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".ui.RootActivity"
+        <activity
+            android:name=".ui.root.RootActivity"
             android:launchMode="singleTask"
             android:screenOrientation="sensorPortrait">
             <intent-filter>
@@ -39,7 +40,7 @@
             android:name=".ui.PermissionsActivity"
             android:theme="@style/AppTheme.NoActionBar.Transparent" />
 
-        <service android:name=".features.foreground.ForegroundService" />
+        <service android:name=".service.ForegroundService" />
 
         <receiver android:name=".widget.WidgetProviderButton" >
             <intent-filter>
@@ -50,7 +51,7 @@
                 android:resource="@xml/widget_info_button" />
         </receiver>
         <service
-            android:name=".features.LightTileService"
+            android:name=".service.LightTileService"
             android:icon="@drawable/ic_light_notification"
             android:label="@string/text_toggle_light"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">

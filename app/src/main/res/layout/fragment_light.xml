@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
-    android:id="@+id/layout_root">
+    android:background="@color/white">
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_large"
-        android:layout_marginBottom="8dp"
+        android:layout_gravity="end|bottom"
+        android:layout_margin="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_gravity="end|bottom"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="@null"
         app:fabSize="normal"
         app:layout_anchor="@id/layout_content"
         app:layout_anchorGravity="bottom|end"
