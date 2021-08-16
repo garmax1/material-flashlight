@@ -15,6 +15,7 @@ import co.garmax.materialflashlight.databinding.FragmentMainBinding
 import co.garmax.materialflashlight.extensions.observeNotNull
 import co.garmax.materialflashlight.features.modes.ModeBase.Mode
 import co.garmax.materialflashlight.features.modules.ModuleBase.Module
+import co.garmax.materialflashlight.service.ForegroundService
 import co.garmax.materialflashlight.ui.BaseFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import timber.log.Timber
@@ -56,7 +57,11 @@ class MainFragment : BaseFragment() {
         with(binding) {
 
             fab.setOnClickListener {
-                viewModel.toggleLight(!viewModel.isLightTurnedOn)
+                if (viewModel.isLightTurnedOn) {
+                    ForegroundService.stopService(requireContext())
+                } else {
+                    ForegroundService.startService(requireContext())
+                }
             }
 
             layoutKeepScreenOn.setOnClickListener { binding.switchKeepScreenOn.toggle() }

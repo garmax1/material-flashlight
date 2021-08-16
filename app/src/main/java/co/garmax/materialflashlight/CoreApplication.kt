@@ -1,7 +1,8 @@
 package co.garmax.materialflashlight
 
 import android.app.Application
-import co.garmax.materialflashlight.di.coreModule
+import co.garmax.materialflashlight.di.dataModule
+import co.garmax.materialflashlight.di.presentationModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import timber.log.Timber
@@ -13,7 +14,7 @@ class CoreApplication : Application() {
 
         startKoin {
             androidContext(this@CoreApplication)
-            modules(coreModule)
+            modules(presentationModule, dataModule)
         }
 
         // Logs

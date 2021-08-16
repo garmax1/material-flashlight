@@ -11,13 +11,14 @@ import io.reactivex.subjects.Subject
 abstract class ModeBase {
 
     enum class Mode {
-        MODE_OFF, MODE_SOUND_STROBE, MODE_INTERVAL_STROBE, MODE_TORCH, MODE_SOS
+        MODE_SOUND_STROBE, MODE_INTERVAL_STROBE, MODE_TORCH, MODE_SOS
     }
 
     /**
      * Volume of the light
      */
-    private val lightVolumeSubject: Subject<Int> = PublishSubject.create()
+    val lightVolumeSubject: Observable<Int> get() = _lightVolumeSubject
+    private val _lightVolumeSubject: Subject<Int> = PublishSubject.create()
 
     /**
      * Start mode. Light will be turned on\off depends on mode implementation.
@@ -36,17 +37,10 @@ abstract class ModeBase {
     abstract fun checkPermissions(): Boolean
 
     /**
-     * Stream of brightnessObservable volume
-     */
-    fun brightnessObservable(): Observable<Int> {
-        return lightVolumeSubject
-    }
-
-    /**
      * Change brightnessObservable state
      */
     fun setBrightness(percentage: Int) {
-        lightVolumeSubject.onNext(percentage)
+        _lightVolumeSubject.onNext(percentage)
     }
 
     companion object {

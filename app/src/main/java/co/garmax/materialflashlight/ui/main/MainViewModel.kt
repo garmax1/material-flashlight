@@ -3,17 +3,15 @@ package co.garmax.materialflashlight.ui.main
 import androidx.lifecycle.ViewModel
 import co.garmax.materialflashlight.extensions.liveDataOf
 import co.garmax.materialflashlight.features.LightManager
-import co.garmax.materialflashlight.features.SettingsRepository
 import co.garmax.materialflashlight.features.modes.ModeBase
 import co.garmax.materialflashlight.features.modes.ModeFactory
 import co.garmax.materialflashlight.features.modules.ModuleBase
 import co.garmax.materialflashlight.features.modules.ModuleFactory
+import co.garmax.materialflashlight.repositories.SettingsRepository
 import co.garmax.materialflashlight.utils.PostExecutionThread
-import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 
 class MainViewModel(
-    workerScheduler: Scheduler,
     postExecutionThread: PostExecutionThread,
     private val lightManager: LightManager,
     private val settingsRepository: SettingsRepository,
@@ -46,13 +44,8 @@ class MainViewModel(
     init {
         disposableLightToggle = lightManager
             .toggleStateStream
-            .subscribeOn(workerScheduler)
             .observeOn(postExecutionThread.scheduler)
             .subscribe { liveDataLightToggle.value = it }
-    }
-
-    fun toggleLight(isTurnOn: Boolean) {
-        if (isTurnOn) lightManager.turnOn() else lightManager.turnOff()
     }
 
     fun setMode(mode: ModeBase.Mode) {

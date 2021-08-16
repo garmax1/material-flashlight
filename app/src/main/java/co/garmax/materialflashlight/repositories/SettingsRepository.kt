@@ -1,4 +1,4 @@
-package co.garmax.materialflashlight.features
+package co.garmax.materialflashlight.repositories
 
 import android.content.Context
 import co.garmax.materialflashlight.features.modes.ModeBase

@@ -1,4 +1,4 @@
-package co.garmax.materialflashlight.features
+package co.garmax.materialflashlight.service
 
 import android.graphics.drawable.Icon
 import android.os.Build
@@ -6,8 +6,8 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 import co.garmax.materialflashlight.R
+import co.garmax.materialflashlight.features.LightManager
 import co.garmax.materialflashlight.utils.PostExecutionThread
-import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import org.koin.android.ext.android.inject
 
@@ -19,7 +19,6 @@ class LightTileService : TileService() {
 
     private val lightManager: LightManager by inject()
 
-    private val workScheduler: Scheduler by inject()
     private val postExecutionThread: PostExecutionThread by inject()
 
     private var disposableToggleState: Disposable? = null
@@ -65,7 +64,6 @@ class LightTileService : TileService() {
     override fun onStartListening() {
         super.onStartListening()
         disposableToggleState = lightManager.toggleStateStream
-            .subscribeOn(workScheduler)
             .observeOn(postExecutionThread.scheduler)
             .subscribe { isTurnedOn: Boolean -> setCurrentState(if (isTurnedOn) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE) }
 

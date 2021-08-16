@@ -55,8 +55,4 @@ class CameraFlashModuleV23(context: Context) : BaseCameraFlashModule(context) {
             Timber.e(e, "Can't turn off flashlight")
         }
     }
-
-    override fun release() {
-        // Do nothing
-    }
 }

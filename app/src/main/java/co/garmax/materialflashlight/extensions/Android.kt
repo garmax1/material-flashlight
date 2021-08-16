@@ -1,6 +1,5 @@
 package co.garmax.materialflashlight.extensions
 
-import android.app.Activity
 import android.content.res.Resources
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleOwner
@@ -31,15 +30,3 @@ fun <T : Any, L : LiveData<T>> LifecycleOwner.observeNotNull(liveData: L, body: 
         },
         { it?.let(body) }
     )
-
-inline fun <reified T> Activity.extra(key: String, default: T? = null): Lazy<T?> = lazy {
-    return@lazy (intent?.extras?.get(key) as? T) ?: default
-}
-
-inline fun <reified T> Activity.extraNonNull(key: String): Lazy<T> = lazy {
-    return@lazy intent.extras!!.get(key) as T
-}
-
-inline fun <reified T> Activity.extraNonNull(key: String, default: T): Lazy<T> = lazy {
-    return@lazy (intent?.extras?.get(key) as? T) ?: default
-}

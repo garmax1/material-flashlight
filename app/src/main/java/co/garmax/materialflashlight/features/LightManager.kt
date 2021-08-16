@@ -3,21 +3,16 @@ package co.garmax.materialflashlight.features
 import android.content.Context
 import android.widget.Toast
 import co.garmax.materialflashlight.R
-import co.garmax.materialflashlight.features.foreground.ForegroundService
 import co.garmax.materialflashlight.features.modes.ModeBase
 import co.garmax.materialflashlight.features.modules.ModuleBase
-import co.garmax.materialflashlight.utils.PostExecutionThread
 import co.garmax.materialflashlight.widget.WidgetManager
 import io.reactivex.Observable
-import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import io.reactivex.subjects.BehaviorSubject
 
 class LightManager(
     private val widgetManager: WidgetManager,
-    private val context: Context,
-    private val workScheduler: Scheduler,
-    private val postExecutionThread: PostExecutionThread
+    private val context: Context
 ) {
 
     val isTurnedOn get() = _toggleStateObservable.value == true
@@ -57,27 +52,16 @@ class LightManager(
 
         // Listen mode light state and set to module
         disposableModeState = requireMode()
-            .brightnessObservable()
-            .subscribeOn(workScheduler)
-            .observeOn(postExecutionThread.scheduler)
+            .lightVolumeSubject
             .subscribe {
                 requireModule().setBrightness(it)
             }
 
         requireMode().start()
 
-        setToggleState(true)
+        _toggleStateObservable.onNext(true)
 
         widgetManager.updateWidgets()
-    }
-
-    private fun setToggleState(turnedOn: Boolean) {
-        if (turnedOn) {
-            ForegroundService.startService(context)
-        } else {
-            ForegroundService.stopService(context)
-        }
-        _toggleStateObservable.onNext(turnedOn)
     }
 
     fun turnOff() {
@@ -85,7 +69,8 @@ class LightManager(
 
         requireMode().stop()
         requireModule().release()
-        setToggleState(false)
+        requireModule().release()
+        _toggleStateObservable.onNext(false)
 
         // Free observable
         disposableModeState?.dispose()
@@ -105,7 +90,6 @@ class LightManager(
         turnOff()
         currentMode = mode
 
-        // Restart if was before
         if (isWasTurnedOn) turnOn()
     }
 
@@ -114,7 +98,6 @@ class LightManager(
         turnOff()
         currentModule = module
 
-        // Restart if was before
         if (isWasTurnedOn) turnOn()
     }
 }

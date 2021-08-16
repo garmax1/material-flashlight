@@ -36,4 +36,8 @@ abstract class BaseCameraFlashModule(val context: Context) : ModuleBase {
 
         return true
     }
+
+    override fun release() {
+        lightOff()
+    }
 }

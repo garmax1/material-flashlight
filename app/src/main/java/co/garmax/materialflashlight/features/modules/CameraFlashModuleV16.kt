@@ -72,6 +72,8 @@ class CameraFlashModuleV16(context: Context) : BaseCameraFlashModule(context) {
     }
 
     override fun release() {
+        super.release()
+
         invalidateCamera()
     }
 

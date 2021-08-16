@@ -19,7 +19,7 @@ class PermissionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        getIntent()?.getStringArrayExtra(EXTRA_PERMISSIONS_ARRAY)?.let {
+        intent.getStringArrayExtra(EXTRA_PERMISSIONS_ARRAY)?.let {
             ActivityCompat.requestPermissions(this, it, RC_CHECK_PERMISSION)
         }
     }

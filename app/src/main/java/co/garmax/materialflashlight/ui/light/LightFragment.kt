@@ -12,8 +12,8 @@ import android.view.ViewGroup
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import co.garmax.materialflashlight.databinding.FragmentLightBinding
 import co.garmax.materialflashlight.features.LightManager
-import co.garmax.materialflashlight.features.SettingsRepository
 import co.garmax.materialflashlight.features.modules.ScreenModule
+import co.garmax.materialflashlight.repositories.SettingsRepository
 import co.garmax.materialflashlight.ui.BaseFragment
 import org.koin.android.ext.android.inject
 
