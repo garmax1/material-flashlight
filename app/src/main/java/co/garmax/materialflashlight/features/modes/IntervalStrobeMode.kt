@@ -27,17 +27,29 @@ class IntervalStrobeMode(private val workerScheduler: Scheduler) : ModeBase() {
 
     override fun stop() {
         setBrightness(MIN_LIGHT_VOLUME)
-        if (disposable != null) {
-            disposable!!.dispose()
-        }
+        disposable?.dispose()
+        disposable = null
     }
 
     override fun checkPermissions(): Boolean {
         return true
     }
 
+    fun updateStrobe(timeOn: Int, timeOff: Int) {
+        STROBE_PERIOD = if (timeOn <= 0) DEFAULT_STROBE_PERIOD else timeOn
+        DELAY_PERIOD = if (timeOff <= 0) DEFAULT_DELAY_PERIOD else timeOff
+
+        if (disposable != null) {
+            stop()
+            start()
+        }
+    }
+
     companion object {
-        private const val STROBE_PERIOD = 300
-        private const val DELAY_PERIOD = 200
+        const val DEFAULT_STROBE_PERIOD = 300
+        const val DEFAULT_DELAY_PERIOD = 200
+
+        var STROBE_PERIOD = DEFAULT_STROBE_PERIOD
+        var DELAY_PERIOD = DEFAULT_DELAY_PERIOD
     }
 }

@@ -39,6 +39,9 @@ class MainViewModel(
 
     val lightModule get() = settingsRepository.module
 
+    val strobeOnPeriod get() = settingsRepository.strobeOnPeriod
+    val strobeOffPeriod get() = settingsRepository.strobeOffPeriod
+
     private var disposableLightToggle: Disposable? = null
 
     init {
@@ -56,6 +59,12 @@ class MainViewModel(
     fun setModule(module: ModuleBase.Module) {
         settingsRepository.module = module
         lightManager.setModule(moduleFactory.getModule(module))
+    }
+
+    fun setStrobePeriod(timeOn: Int, timeOff: Int) {
+        settingsRepository.strobeOnPeriod = timeOn
+        settingsRepository.strobeOffPeriod = timeOff
+        lightManager.setStrobePeriod(timeOn, timeOff)
     }
 
     override fun onCleared() {

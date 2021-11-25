@@ -1,6 +1,7 @@
 package co.garmax.materialflashlight.repositories
 
 import android.content.Context
+import co.garmax.materialflashlight.features.modes.IntervalStrobeMode
 import co.garmax.materialflashlight.features.modes.ModeBase
 import co.garmax.materialflashlight.features.modules.ModuleBase
 
@@ -39,10 +40,28 @@ class SettingsRepository(context: Context) {
             sharedPreferences.edit().putString(MODULE, module.name).apply()
         }
 
+    var strobeOnPeriod: Int
+        get() {
+            return sharedPreferences.getInt(STROBE_ON_PERIOD, IntervalStrobeMode.DEFAULT_STROBE_PERIOD)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt(STROBE_ON_PERIOD, value).apply()
+        }
+
+    var strobeOffPeriod: Int
+        get() {
+            return sharedPreferences.getInt(STROBE_OFF_PERIOD, IntervalStrobeMode.DEFAULT_DELAY_PERIOD)
+        }
+        set(value) {
+            sharedPreferences.edit().putInt(STROBE_OFF_PERIOD, value).apply()
+        }
+
     companion object {
         private const val KEEP_SCREEN_ON = "keep_screen_on"
         private const val MODE = "mode_name"
         private const val MODULE = "module_name"
         private const val AUTO_TURN_ON = "auto_turn_on"
+        private const val STROBE_ON_PERIOD = "strobe_on_period"
+        private const val STROBE_OFF_PERIOD = "strobe_off_period"
     }
 }
