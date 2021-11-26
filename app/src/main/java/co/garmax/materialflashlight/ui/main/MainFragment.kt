@@ -3,6 +3,8 @@ package co.garmax.materialflashlight.ui.main
 import android.animation.ArgbEvaluator
 import android.animation.ValueAnimator
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -89,9 +91,15 @@ class MainFragment : BaseFragment() {
                     else -> {
                     }
                 }
+                intervalStrobeOn.setText(viewModel.strobeOnPeriod.toString())
+                intervalStrobeOff.setText(viewModel.strobeOffPeriod.toString())
             } else {
                 setState(viewModel.isLightTurnedOn, false)
             }
+
+            intervalStrobeTiming.visibility =
+                if (radioIntervalStrobe.isChecked) View.VISIBLE
+                else View.GONE
 
             switchKeepScreenOn.isChecked = viewModel.isKeepScreenOn
             fab.keepScreenOn = viewModel.isKeepScreenOn
@@ -102,7 +110,12 @@ class MainFragment : BaseFragment() {
                 if (isChecked) viewModel.setMode(Mode.MODE_SOUND_STROBE)
             }
             radioIntervalStrobe.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) viewModel.setMode(Mode.MODE_INTERVAL_STROBE)
+                if (isChecked) {
+                    viewModel.setMode(Mode.MODE_INTERVAL_STROBE)
+                    intervalStrobeTiming.visibility = View.VISIBLE
+                } else {
+                    intervalStrobeTiming.visibility = View.GONE
+                }
             }
             radioTorch.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) viewModel.setMode(Mode.MODE_TORCH)
@@ -125,6 +138,25 @@ class MainFragment : BaseFragment() {
             switchAutoTurnOn.setOnCheckedChangeListener { _, isChecked ->
                 viewModel.isAutoTurnedOn = isChecked
             }
+
+            val textWatcherObject = object: TextWatcher {
+                override fun afterTextChanged(p0: Editable?) {}
+
+                override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+
+                override fun onTextChanged(p0: CharSequence?, start: Int, before: Int, count: Int) {
+                    val strobeOnString = intervalStrobeOn.text.toString()
+                    val strobeOn = if (strobeOnString == "") 0 else Integer.parseInt(strobeOnString)
+
+                    val strobeOffString = intervalStrobeOff.text.toString()
+                    val strobeOff = if (strobeOffString == "") 0 else Integer.parseInt(strobeOffString)
+
+                    viewModel.setStrobePeriod(strobeOn, strobeOff)
+                }
+            }
+
+            intervalStrobeOn.addTextChangedListener(textWatcherObject)
+            intervalStrobeOff.addTextChangedListener(textWatcherObject)
 
             textVersion.text = getString(R.string.text_version, BuildConfig.VERSION_NAME)
         }

@@ -147,6 +147,58 @@
 
             </RadioGroup>
 
+            <LinearLayout
+                android:id="@+id/interval_strobe_timing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_rounded"
+                android:orientation="vertical"
+                android:padding="16dp"
+                android:visibility="gone" >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_on_ms" />
+
+                    <EditText
+                        android:id="@+id/interval_strobe_on"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:inputType="number"
+                        android:maxLength="9" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/time_off_ms" />
+
+                    <EditText
+                        android:id="@+id/interval_strobe_off"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginStart="5dp"
+                        android:inputType="number"
+                        android:maxLength="9" />
+                </LinearLayout>
+
+            </LinearLayout>
+
             <TextView
                 android:id="@+id/text_version"
                 android:layout_width="wrap_content"

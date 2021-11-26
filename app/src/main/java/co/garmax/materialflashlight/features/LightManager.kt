@@ -3,6 +3,7 @@ package co.garmax.materialflashlight.features
 import android.content.Context
 import android.widget.Toast
 import co.garmax.materialflashlight.R
+import co.garmax.materialflashlight.features.modes.IntervalStrobeMode
 import co.garmax.materialflashlight.features.modes.ModeBase
 import co.garmax.materialflashlight.features.modules.ModuleBase
 import co.garmax.materialflashlight.widget.WidgetManager
@@ -99,5 +100,11 @@ class LightManager(
         currentModule = module
 
         if (isWasTurnedOn) turnOn()
+    }
+
+    fun setStrobePeriod(timeOn: Int, timeOff: Int) {
+        if (currentMode is IntervalStrobeMode) {
+            (currentMode as IntervalStrobeMode).updateStrobe(timeOn, timeOff)
+        }
     }
 }
