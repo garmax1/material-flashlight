@@ -19,43 +19,43 @@ class SosMode(private val workerScheduler: Scheduler) : ModeBase() {
             TimeUnit.MILLISECONDS,
             workerScheduler
         )
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 long
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 long
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 long
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
+            .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
             .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
-            .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) } // 1 short
+            .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
             .delay(DELAY_LONG.toLong(), TimeUnit.MILLISECONDS)
-            .subscribe { any: Long? -> }
+            .subscribe { }
     }
 
     override fun stop() {

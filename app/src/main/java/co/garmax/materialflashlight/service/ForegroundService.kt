@@ -56,12 +56,15 @@ class ForegroundService : Service() {
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_light_notification)
-            .setContentText(getString(R.string.notification_tap_to_turn_off))
             .setContentTitle(getString(R.string.notification_light))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOngoing(true)
             .setWhen(System.currentTimeMillis())
-            .setContentIntent(pendingIntent)
+            .addAction(
+                R.drawable.ic_power_off,
+                getString(R.string.notification_tap_to_turn_off),
+                pendingIntent
+            )
 
         createNotificationChannel()
 

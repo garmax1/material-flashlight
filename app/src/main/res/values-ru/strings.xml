@@ -20,7 +20,10 @@
     <string name="channel_description">Свет</string>
 
     <string name="notification_light">Свет включён</string>
-    <string name="notification_tap_to_turn_off">Нажмите, что бы отключить</string>
+    <string name="notification_tap_to_turn_off">Нажмите, чтобы отключить</string>
 
     <string name="warning_another_app_use_flash">Другое приложение использует вспышку камеры</string>
+
+    <string name="time_off_ms">Выключен (мс)</string>
+    <string name="time_on_ms">Включен (мс)</string>
 </resources>

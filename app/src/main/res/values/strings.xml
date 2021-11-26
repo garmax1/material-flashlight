@@ -23,6 +23,7 @@
     <string name="notification_tap_to_turn_off">Tap to turn off</string>
 
     <string name="warning_another_app_use_flash">Another application is using camera\'s flash</string>
+
     <string name="time_off_ms">Time Off (ms)</string>
     <string name="time_on_ms">Time On (ms)</string>
 </resources>

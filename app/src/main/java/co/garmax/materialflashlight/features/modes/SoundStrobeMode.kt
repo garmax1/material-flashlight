@@ -13,6 +13,8 @@ import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Interrupted light depending on the around noise volume
@@ -61,7 +63,7 @@ class SoundStrobeMode(
             TimeUnit.MILLISECONDS,
             workerScheduler
         )
-            .subscribe { any: Long? -> setBrightness(amplitudePercentage(amplitude)) }
+            .subscribe { _: Long? -> setBrightness(amplitudePercentage(amplitude)) }
 
         setBrightness(MAX_AMPLITUDE)
     }
@@ -90,12 +92,12 @@ class SoundStrobeMode(
         // Reduce amplitude min\max tunnel
         // because min\max value can be above or below initial avg value
         // and limit with 0 and max amplitude value
-        maxAmplitude = Math.max(maxAmplitude - INCREASE_STEP, 0)
-        minAmplitude = Math.min(minAmplitude + INCREASE_STEP, MAX_AMPLITUDE)
+        maxAmplitude = max(maxAmplitude - INCREASE_STEP, 0)
+        minAmplitude = min(minAmplitude + INCREASE_STEP, MAX_AMPLITUDE)
 
         // Save min max values
-        maxAmplitude = Math.max(maxAmplitude, curAmplitude)
-        minAmplitude = Math.min(minAmplitude, curAmplitude)
+        maxAmplitude = max(maxAmplitude, curAmplitude)
+        minAmplitude = min(minAmplitude, curAmplitude)
 
         // If min and max equal, exit to prevent dividing by zero
         if (minAmplitude == maxAmplitude) {

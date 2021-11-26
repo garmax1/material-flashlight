@@ -88,8 +88,6 @@ class MainFragment : BaseFragment() {
                     Mode.MODE_TORCH -> radioTorch.isChecked = true
                     Mode.MODE_SOUND_STROBE -> radioSoundStrobe.isChecked = true
                     Mode.MODE_SOS -> radioSos.isChecked = true
-                    else -> {
-                    }
                 }
                 intervalStrobeOn.setText(viewModel.strobeOnPeriod.toString())
                 intervalStrobeOff.setText(viewModel.strobeOffPeriod.toString())
