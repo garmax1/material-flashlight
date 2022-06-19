@@ -52,7 +52,7 @@ class ForegroundService : Service() {
             putExtra(EXTRA_COMMAND, COMMAND_STOP)
         }
 
-        val pendingIntent = PendingIntent.getService(this, 0, intent, 0)
+        val pendingIntent = PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_MUTABLE)
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_light_notification)

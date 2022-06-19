@@ -34,6 +34,8 @@ class CameraFlashModuleV23(context: Context) : BaseCameraFlashModule(context) {
                 }
             } catch (e: CameraAccessException) {
                 Timber.e(e, "Can't get cameras list")
+            } catch (e: IllegalArgumentException) {
+                Timber.e(e, "Can't turn on flashlight")
             }
         } ?: run {
             Timber.e("Can't initialize CameraManager")
@@ -45,6 +47,8 @@ class CameraFlashModuleV23(context: Context) : BaseCameraFlashModule(context) {
             cameraId?.let { cameraManager?.setTorchMode(it, true) }
         } catch (e: CameraAccessException) {
             Timber.e(e, "Can't turn on flashlight")
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Can't turn on flashlight")
         }
     }
 
@@ -53,6 +57,8 @@ class CameraFlashModuleV23(context: Context) : BaseCameraFlashModule(context) {
             cameraId?.let { cameraManager?.setTorchMode(it, false) }
         } catch (e: CameraAccessException) {
             Timber.e(e, "Can't turn off flashlight")
+        } catch (e: IllegalArgumentException) {
+            Timber.e(e, "Can't turn on flashlight")
         }
     }
 }

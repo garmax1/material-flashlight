@@ -63,7 +63,7 @@ class WidgetProviderButton : AppWidgetProvider(), KoinComponent {
             action = ACTION_WIDGET_BUTTON_CLICK
         }
 
-        return PendingIntent.getBroadcast(context, 0, intent, 0)
+        return PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
     }
 
     private fun setWidgetImage(
