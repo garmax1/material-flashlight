@@ -8,6 +8,8 @@ Download
 
 Google Play [Material Flashlight][googleplaylink]
 
+F-Droid [Material Flashlight][fdroidlink]
+
 License
 =======
 
@@ -25,3 +27,4 @@ License
 
 
 [googleplaylink]: https://play.google.com/store/apps/details?id=co.garmax.materialflashlight
+[fdroidlink]: https://f-droid.org/packages/co.garmax.materialflashlight/
