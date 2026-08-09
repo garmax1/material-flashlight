@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material ফ্ল্যাশলাইট</string>
+
+    <string name="text_keep_screen_on">স্ক্রিন চালু রাখুন</string>
+    <string name="text_torch">টর্চ</string>
+    <string name="text_interval_strobe">বিরতিসহ স্ট্রোব</string>
+    <string name="text_sound_strobe">সঙ্গীত স্ট্রোব</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">শুরুতে স্বয়ংক্রিয়ভাবে ফ্ল্যাশ চালু করুন</string>
+    <string name="text_version">সংস্করণ: %s</string>
+    <string name="text_screen">স্ক্রিন</string>
+    <string name="text_camera_flashlight">ক্যামেরা ফ্ল্যাশলাইট</string>
+
+    <string name="toast_module_not_supported">নির্বাচিত মডিউল এই ডিভাইসে সমর্থিত নয়, অন্যটি চেষ্টা করুন।</string>
+    <string name="toast_module_not_available">নির্বাচিত মডিউল এখন ব্যবহার করা যাচ্ছে না, অন্যটি চেষ্টা করুন।</string>
+
+    <string name="text_toggle_light">আলো</string>
+
+    <string name="channel_name">আলো</string>
+    <string name="channel_description">আলো</string>
+
+    <string name="notification_light">আলো চালু আছে</string>
+    <string name="notification_tap_to_turn_off">বন্ধ করতে ট্যাপ করুন</string>
+
+    <string name="warning_another_app_use_flash">অন্য একটি অ্যাপ ক্যামেরার ফ্ল্যাশ ব্যবহার করছে</string>
+
+    <string name="time_off_ms">বন্ধ সময় (মিসে)</string>
+    <string name="time_on_ms">চালু সময় (মিসে)</string>
+</resources>

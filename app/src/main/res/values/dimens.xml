@@ -4,4 +4,8 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
 
     <dimen name="app_bar_height">240dp</dimen>
+
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_size">72dp</dimen>
+    <dimen name="fab_icon_size">36dp</dimen>
 </resources>

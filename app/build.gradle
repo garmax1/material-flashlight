@@ -1,32 +1,37 @@
 plugins {
-    id 'com.android.application'
-    id 'kotlin-android'
+    alias(libs.plugins.android.application)
 }
 
 android {
-    compileSdkVersion 31
+    namespace 'co.garmax.materialflashlight'
+    compileSdk libs.versions.compileSdk.get().toInteger()
 
     defaultConfig {
         applicationId "co.garmax.materialflashlight"
-        minSdkVersion 16
-        targetSdkVersion 31
-        versionCode 30
-        versionName "2.8"
+        minSdk libs.versions.minSdk.get().toInteger()
+        targetSdk libs.versions.targetSdk.get().toInteger()
+        versionCode 32
+        versionName "2.9"
         vectorDrawables.useSupportLibrary = true
-        resConfigs "en", "ru"
-        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
-        multiDexEnabled true
+        resourceConfigurations += ["en", "zh", "hi", "es", "fr", "ar", "bn", "pt", "ru", "ur"]
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     signingConfigs {
         release {
-            def props = new Properties()
-            props.load(new FileInputStream(rootProject.file('./../signs/garmax.pwd')))
+            // projects/signs — рядом с android/, не внутри него
+            def propsFile = rootProject.file('../../signs/garmax.pwd')
+            if (!propsFile.exists()) {
+                throw new GradleException("Signing properties not found: ${propsFile.absolutePath}")
+            }
 
-            storeFile rootProject.file(props.keyStore)
-            keyAlias props.keyStorePassword
-            storePassword props.keyAlias
-            keyPassword props.keyAliasPassword
+            def props = new Properties()
+            props.load(new FileInputStream(propsFile))
+
+            storeFile new File(propsFile.parentFile, new File(props['keyStore'] as String).name)
+            keyAlias props['keyStorePassword']
+            storePassword props['keyAlias']
+            keyPassword props['keyAliasPassword']
         }
     }
 
@@ -34,52 +39,45 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
+    kotlin {
+        jvmToolchain(17)
     }
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation libs.androidx.core.ktx
+    implementation libs.androidx.appcompat
+    implementation libs.material
+    implementation libs.androidx.fragment.ktx
+    implementation libs.androidx.vectordrawable
+    implementation libs.androidx.localbroadcastmanager
+    implementation libs.androidx.lifecycle.livedata.ktx
+    implementation libs.androidx.lifecycle.viewmodel.ktx
 
-    implementation 'com.google.android.material:material:1.6.1'
+    implementation platform(libs.koin.bom)
+    implementation libs.koin.core
+    implementation libs.koin.android
 
-    // AndroidX
-    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.lifecycle:lifecycle-extensions:2.2.0'
-    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.4.1'
-    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
-    implementation 'androidx.fragment:fragment-ktx:1.4.1'
+    implementation libs.rxjava
+    implementation libs.rxandroid
 
-    // DI
-    api 'io.insert-koin:koin-core:3.1.2'
-    api 'io.insert-koin:koin-android:3.1.2'
+    implementation libs.timber
+    debugImplementation libs.leakcanary.android
 
-    // rx
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.10'
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-
-    // debug
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.7'
-
-    // utils
-    implementation 'com.jakewharton.timber:timber:5.0.1'
-
-    // test
-    testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.mockito:mockito-core:3.3.3'
+    testImplementation libs.junit
+    testImplementation libs.mockito.core
 }

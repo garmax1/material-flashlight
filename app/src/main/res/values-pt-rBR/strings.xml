@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material Lanterna</string>
+
+    <string name="text_keep_screen_on">Manter a tela ligada</string>
+    <string name="text_torch">Lanterna</string>
+    <string name="text_interval_strobe">Estroboscópio por intervalos</string>
+    <string name="text_sound_strobe">Estroboscópio musical</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">Ligar o flash automaticamente ao iniciar</string>
+    <string name="text_version">Versão: %s</string>
+    <string name="text_screen">Tela</string>
+    <string name="text_camera_flashlight">Flash da câmera</string>
+
+    <string name="toast_module_not_supported">O módulo selecionado não é compatível com este dispositivo, tente outro.</string>
+    <string name="toast_module_not_available">O módulo selecionado não pode ser usado agora, tente outro.</string>
+
+    <string name="text_toggle_light">Luz</string>
+
+    <string name="channel_name">Luz</string>
+    <string name="channel_description">Luz</string>
+
+    <string name="notification_light">A luz está ligada</string>
+    <string name="notification_tap_to_turn_off">Toque para desligar</string>
+
+    <string name="warning_another_app_use_flash">Outro aplicativo está usando o flash da câmera</string>
+
+    <string name="time_off_ms">Tempo desligado (ms)</string>
+    <string name="time_on_ms">Tempo ligado (ms)</string>
+</resources>

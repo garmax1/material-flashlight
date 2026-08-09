@@ -2,6 +2,7 @@ package co.garmax.materialflashlight.ui.root
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.extensions.observeNotNull
 import co.garmax.materialflashlight.features.modules.ModuleBase
@@ -15,6 +16,7 @@ class RootActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_root)
 
         if (savedInstanceState == null) {

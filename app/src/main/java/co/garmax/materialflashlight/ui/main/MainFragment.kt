@@ -14,6 +14,7 @@ import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import co.garmax.materialflashlight.BuildConfig
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.databinding.FragmentMainBinding
+import co.garmax.materialflashlight.extensions.applyFabWindowInsets
 import co.garmax.materialflashlight.extensions.observeNotNull
 import co.garmax.materialflashlight.features.modes.ModeBase.Mode
 import co.garmax.materialflashlight.features.modules.ModuleBase.Module
@@ -57,6 +58,8 @@ class MainFragment : BaseFragment() {
             AnimatedVectorDrawableCompat.create(requireContext(), R.drawable.avc_appbar_night)
 
         with(binding) {
+
+            fab.applyFabWindowInsets()
 
             fab.setOnClickListener {
                 if (viewModel.isLightTurnedOn) {

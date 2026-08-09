@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material Lampe torche</string>
+
+    <string name="text_keep_screen_on">Garder l\'écran allumé</string>
+    <string name="text_torch">Lampe torche</string>
+    <string name="text_interval_strobe">Stroboscope par intervalles</string>
+    <string name="text_sound_strobe">Stroboscope musical</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">Allumer le flash automatiquement au démarrage</string>
+    <string name="text_version">Version : %s</string>
+    <string name="text_screen">Écran</string>
+    <string name="text_camera_flashlight">Flash de l\'appareil photo</string>
+
+    <string name="toast_module_not_supported">Le module sélectionné n\'est pas pris en charge sur cet appareil, essayez-en un autre.</string>
+    <string name="toast_module_not_available">Le module sélectionné ne peut pas être utilisé pour le moment, essayez-en un autre.</string>
+
+    <string name="text_toggle_light">Lumière</string>
+
+    <string name="channel_name">Lumière</string>
+    <string name="channel_description">Lumière</string>
+
+    <string name="notification_light">La lumière est allumée</string>
+    <string name="notification_tap_to_turn_off">Appuyer pour éteindre</string>
+
+    <string name="warning_another_app_use_flash">Une autre application utilise le flash de l\'appareil photo</string>
+
+    <string name="time_off_ms">Temps éteint (ms)</string>
+    <string name="time_on_ms">Temps allumé (ms)</string>
+</resources>

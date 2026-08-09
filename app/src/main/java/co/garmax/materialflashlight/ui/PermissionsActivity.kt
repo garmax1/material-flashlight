@@ -6,15 +6,12 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import co.garmax.materialflashlight.features.LightManager
-import org.koin.android.ext.android.inject
+import co.garmax.materialflashlight.service.ForegroundService
 
 /**
  * Activity to call runtime permission from any place like service, widget or activity
  */
 class PermissionsActivity : AppCompatActivity() {
-
-    private val lightManager: LightManager by inject()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,7 +30,7 @@ class PermissionsActivity : AppCompatActivity() {
 
         if (requestCode == RC_CHECK_PERMISSION) {
             if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                lightManager.turnOn()
+                ForegroundService.startService(this)
             }
         }
 

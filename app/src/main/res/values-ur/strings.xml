@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material فلیش لائٹ</string>
+
+    <string name="text_keep_screen_on">اسکرین آن رکھیں</string>
+    <string name="text_torch">ٹارچ</string>
+    <string name="text_interval_strobe">وقفے وقفے سے اسٹروب</string>
+    <string name="text_sound_strobe">موسیقی اسٹروب</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">شروع پر فلیش خود بخود آن کریں</string>
+    <string name="text_version">ورژن: %s</string>
+    <string name="text_screen">اسکرین</string>
+    <string name="text_camera_flashlight">کیمرہ فلیش لائٹ</string>
+
+    <string name="toast_module_not_supported">منتخب ماڈیول اس ڈیوائس پر سپورٹڈ نہیں ہے، کوئی اور آزمائیں۔</string>
+    <string name="toast_module_not_available">منتخب ماڈیول اب استعمال نہیں ہو سکتا، کوئی اور آزمائیں۔</string>
+
+    <string name="text_toggle_light">روشنی</string>
+
+    <string name="channel_name">روشنی</string>
+    <string name="channel_description">روشنی</string>
+
+    <string name="notification_light">روشنی آن ہے</string>
+    <string name="notification_tap_to_turn_off">بند کرنے کے لیے تھپتھپائیں</string>
+
+    <string name="warning_another_app_use_flash">کوئی اور ایپ کیمرے کی فلیش استعمال کر رہی ہے</string>
+
+    <string name="time_off_ms">بند وقت (ملی سیکنڈ)</string>
+    <string name="time_on_ms">آن وقت (ملی سیکنڈ)</string>
+</resources>

@@ -1,7 +1,6 @@
 package co.garmax.materialflashlight.features.modes
 
 import android.content.Context
-import co.garmax.materialflashlight.features.modes.ModeBase
 import io.reactivex.Scheduler
 
 class ModeFactory(private val workerScheduler: Scheduler, private val context: Context) {

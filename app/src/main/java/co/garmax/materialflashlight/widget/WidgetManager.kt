@@ -4,7 +4,6 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import co.garmax.materialflashlight.widget.WidgetProviderButton
 
 class WidgetManager(private val context: Context) {
 

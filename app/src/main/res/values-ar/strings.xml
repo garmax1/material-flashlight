@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material كشاف</string>
+
+    <string name="text_keep_screen_on">إبقاء الشاشة قيد التشغيل</string>
+    <string name="text_torch">مصباح يدوي</string>
+    <string name="text_interval_strobe">وميض متقطع</string>
+    <string name="text_sound_strobe">وميض مع الموسيقى</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">تشغيل الفلاش تلقائيًا عند البدء</string>
+    <string name="text_version">الإصدار: %s</string>
+    <string name="text_screen">الشاشة</string>
+    <string name="text_camera_flashlight">فلاش الكاميرا</string>
+
+    <string name="toast_module_not_supported">الوحدة المحددة غير مدعومة على هذا الجهاز، جرّب وحدة أخرى.</string>
+    <string name="toast_module_not_available">لا يمكن استخدام الوحدة المحددة الآن، جرّب وحدة أخرى.</string>
+
+    <string name="text_toggle_light">الضوء</string>
+
+    <string name="channel_name">الضوء</string>
+    <string name="channel_description">الضوء</string>
+
+    <string name="notification_light">الضوء قيد التشغيل</string>
+    <string name="notification_tap_to_turn_off">اضغط للإيقاف</string>
+
+    <string name="warning_another_app_use_flash">تطبيق آخر يستخدم فلاش الكاميرا</string>
+
+    <string name="time_off_ms">وقت الإيقاف (مللي ثانية)</string>
+    <string name="time_on_ms">وقت التشغيل (مللي ثانية)</string>
+</resources>

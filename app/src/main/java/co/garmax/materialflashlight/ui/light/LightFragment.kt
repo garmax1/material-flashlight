@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import co.garmax.materialflashlight.databinding.FragmentLightBinding
+import co.garmax.materialflashlight.extensions.applyFabWindowInsets
 import co.garmax.materialflashlight.features.LightManager
 import co.garmax.materialflashlight.features.modules.ScreenModule
 import co.garmax.materialflashlight.repositories.SettingsRepository
@@ -54,6 +55,7 @@ class LightFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.fab.applyFabWindowInsets()
         binding.fab.keepScreenOn = settingsRepository.isKeepScreenOn
         binding.fab.setOnClickListener { lightManager.turnOff() }
     }

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material 手电筒</string>
+
+    <string name="text_keep_screen_on">保持屏幕常亮</string>
+    <string name="text_torch">手电筒</string>
+    <string name="text_interval_strobe">间歇频闪</string>
+    <string name="text_sound_strobe">音乐频闪</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">启动时自动开启闪光灯</string>
+    <string name="text_version">版本：%s</string>
+    <string name="text_screen">屏幕</string>
+    <string name="text_camera_flashlight">相机闪光灯</string>
+
+    <string name="toast_module_not_supported">此设备不支持所选模块，请尝试其他模块。</string>
+    <string name="toast_module_not_available">所选模块当前无法使用，请尝试其他模块。</string>
+
+    <string name="text_toggle_light">灯光</string>
+
+    <string name="channel_name">灯光</string>
+    <string name="channel_description">灯光</string>
+
+    <string name="notification_light">灯光已开启</string>
+    <string name="notification_tap_to_turn_off">点击关闭</string>
+
+    <string name="warning_another_app_use_flash">其他应用正在使用相机闪光灯</string>
+
+    <string name="time_off_ms">关闭时间（毫秒）</string>
+    <string name="time_on_ms">开启时间（毫秒）</string>
+</resources>

@@ -11,14 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
-        android:layout_margin="16dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_marginBottom="@dimen/fab_margin"
         android:contentDescription="@null"
-        app:fabSize="normal"
-        app:layout_anchor="@id/layout_content"
-        app:layout_anchorGravity="bottom|end"
+        app:fabCustomSize="@dimen/fab_size"
+        app:maxImageSize="@dimen/fab_icon_size"
         app:srcCompat="@drawable/ic_power_on" />
 
 </FrameLayout>

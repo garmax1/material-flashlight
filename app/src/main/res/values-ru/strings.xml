@@ -4,7 +4,7 @@
     <string name="text_keep_screen_on">Держать экран включенным</string>
     <string name="text_torch">Гореть</string>
     <string name="text_interval_strobe">Мигать с интервалом</string>
-    <string name="text_sound_strobe">Мигать пo звукам</string>
+    <string name="text_sound_strobe">Мигать по звукам</string>
     <string name="text_sos">SOS</string>
     <string name="text_auto_turn_on">Включить при запуске</string>
     <string name="text_version">Версия: %s</string>
@@ -14,7 +14,7 @@
     <string name="toast_module_not_supported">Выбранный модуль не поддерживается на данном устройстве, попробуйте другой.</string>
     <string name="toast_module_not_available">Выбранный модуль не может быть использован сейчас, попробуйте другой.</string>
 
-    <string name="text_toggle_light">Cвет</string>
+    <string name="text_toggle_light">Свет</string>
 
     <string name="channel_name">Свет</string>
     <string name="channel_description">Свет</string>

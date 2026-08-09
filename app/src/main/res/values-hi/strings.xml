@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Material फ़्लैशलाइट</string>
+
+    <string name="text_keep_screen_on">स्क्रीन चालू रखें</string>
+    <string name="text_torch">टॉर्च</string>
+    <string name="text_interval_strobe">अंतराल स्ट्रोब</string>
+    <string name="text_sound_strobe">संगीत स्ट्रोब</string>
+    <string name="text_sos">SOS</string>
+    <string name="text_auto_turn_on">शुरुआत पर फ़्लैश अपने आप चालू करें</string>
+    <string name="text_version">संस्करण: %s</string>
+    <string name="text_screen">स्क्रीन</string>
+    <string name="text_camera_flashlight">कैमरा फ़्लैशलाइट</string>
+
+    <string name="toast_module_not_supported">चयनित मॉड्यूल इस डिवाइस पर समर्थित नहीं है, कोई अन्य आज़माएँ।</string>
+    <string name="toast_module_not_available">चयनित मॉड्यूल अभी उपयोग नहीं किया जा सकता, कोई अन्य आज़माएँ।</string>
+
+    <string name="text_toggle_light">लाइट</string>
+
+    <string name="channel_name">लाइट</string>
+    <string name="channel_description">लाइट</string>
+
+    <string name="notification_light">लाइट चालू है</string>
+    <string name="notification_tap_to_turn_off">बंद करने के लिए टैप करें</string>
+
+    <string name="warning_another_app_use_flash">कोई अन्य ऐप कैमरे की फ़्लैश का उपयोग कर रहा है</string>
+
+    <string name="time_off_ms">बंद समय (मिसे)</string>
+    <string name="time_on_ms">चालू समय (मिसे)</string>
+</resources>
