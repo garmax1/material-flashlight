@@ -67,6 +67,10 @@ class MainViewModel(
         lightManager.setStrobePeriod(timeOn, timeOff)
     }
 
+    fun toggleLight() {
+        lightManager.toggle()
+    }
+
     override fun onCleared() {
         super.onCleared()
 

@@ -12,8 +12,4 @@ class TorchMode : ModeBase() {
     override fun stop() {
         setBrightness(MIN_LIGHT_VOLUME)
     }
-
-    override fun checkPermissions(): Boolean {
-        return true
-    }
 }

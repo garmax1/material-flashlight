@@ -6,6 +6,7 @@ import androidx.core.view.WindowCompat
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.extensions.observeNotNull
 import co.garmax.materialflashlight.features.modules.ModuleBase
+import co.garmax.materialflashlight.service.ForegroundService
 import co.garmax.materialflashlight.ui.light.LightFragment
 import co.garmax.materialflashlight.ui.main.MainFragment
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -22,8 +23,9 @@ class RootActivity : AppCompatActivity() {
         if (savedInstanceState == null) {
             replaceFragment(viewModel.isAutoTurnOn)
 
-            // Handle auto turn on
-            if (viewModel.isAutoTurnOn) viewModel.toggleLight(true)
+            if (viewModel.isAutoTurnOn) {
+                ForegroundService.startService(this)
+            }
         }
 
         setupViewModel()
@@ -34,7 +36,6 @@ class RootActivity : AppCompatActivity() {
     }
 
     private fun replaceFragment(isTunedOn: Boolean) {
-        // If module is screen and turned on
         val fragment = if (isTunedOn && viewModel.lightModule == ModuleBase.Module.MODULE_SCREEN) {
             LightFragment()
         } else {
@@ -43,19 +44,17 @@ class RootActivity : AppCompatActivity() {
 
         val fragmentCurrent = supportFragmentManager.findFragmentById(R.id.layout_container)
 
-        // Change fragment only if fragment is different
         if (fragmentCurrent == null || fragment.javaClass != fragmentCurrent.javaClass) {
-            getSupportFragmentManager()
+            supportFragmentManager
                 .beginTransaction()
                 .replace(R.id.layout_container, fragment, fragment.javaClass.name)
                 .commit()
         }
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onBackPressed() {
         super.onBackPressed()
-
-        // Stop service if user close app
-        viewModel.toggleLight(false)
+        ForegroundService.stopService(this)
     }
 }

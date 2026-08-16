@@ -31,10 +31,15 @@ abstract class ModeBase {
     abstract fun stop()
 
     /**
+     * Runtime permissions required by this mode.
+     */
+    open fun requiredRuntimePermissions(): List<String> = emptyList()
+
+    /**
      * Check runtime permission for the mode
      * @return true if all needed permission granted, false - if permission requested
      */
-    abstract fun checkPermissions(): Boolean
+    open fun checkPermissions(): Boolean = true
 
     /**
      * Change brightnessObservable state

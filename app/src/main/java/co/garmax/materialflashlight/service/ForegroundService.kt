@@ -15,17 +15,16 @@ import androidx.core.content.ContextCompat
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.features.LightManager
 import org.koin.android.ext.android.inject
+import org.koin.core.context.GlobalContext
 
 /**
- * Service with notification
+ * Keeps the process alive while the light is on.
  */
 class ForegroundService : Service() {
 
     private val lightManager: LightManager by inject()
 
-    override fun onBind(intent: Intent): IBinder? {
-        return null
-    }
+    override fun onBind(intent: Intent): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         intent ?: return super.onStartCommand(intent, flags, startId)
@@ -35,7 +34,6 @@ class ForegroundService : Service() {
         if (command == COMMAND_START) {
             startForegroundWithNotification()
             lightManager.turnOn()
-            // Permission dialog may have been shown; stop FGS if light didn't start.
             if (!lightManager.isTurnedOn) {
                 stop()
             }
@@ -52,51 +50,52 @@ class ForegroundService : Service() {
         stopSelf()
     }
 
-    // Start foreground service with notification
     private fun startForegroundWithNotification() {
-
-        val intent = Intent(applicationContext, ForegroundService::class.java).apply {
+        val stopIntent = Intent(applicationContext, ForegroundService::class.java).apply {
             putExtra(EXTRA_COMMAND, COMMAND_STOP)
         }
 
         val pendingIntent = PendingIntent.getService(
             this,
             0,
-            intent,
+            stopIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_ID)
+        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(R.drawable.ic_light_notification)
             .setContentTitle(getString(R.string.notification_light))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
             .setOngoing(true)
+            .setSilent(true)
             .setWhen(System.currentTimeMillis())
             .addAction(
                 R.drawable.ic_power_off,
                 getString(R.string.notification_tap_to_turn_off),
                 pendingIntent
             )
+            .build()
 
         createNotificationChannel()
 
         ServiceCompat.startForeground(
             this,
             NOTIFICATION_ID,
-            builder.build(),
+            notification,
             ServiceInfo.FOREGROUND_SERVICE_TYPE_SPECIAL_USE
         )
     }
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.channel_name)
-            val descriptionText = getString(R.string.channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_ID, name, importance).apply {
-                description = descriptionText
+            val channel = NotificationChannel(
+                CHANNEL_ID,
+                getString(R.string.channel_name),
+                NotificationManager.IMPORTANCE_LOW
+            ).apply {
+                description = getString(R.string.channel_description)
+                setShowBadge(false)
             }
-            // Register the channel with the system
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
@@ -112,6 +111,9 @@ class ForegroundService : Service() {
         private const val COMMAND_START = 1
 
         fun startService(context: Context) {
+            val lightManager = GlobalContext.get().get<LightManager>()
+            if (!lightManager.ensureRuntimePermissions()) return
+
             Intent(context, ForegroundService::class.java).apply {
                 putExtra(EXTRA_COMMAND, COMMAND_START)
             }.let {

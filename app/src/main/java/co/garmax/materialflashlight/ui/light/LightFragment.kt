@@ -15,6 +15,7 @@ import co.garmax.materialflashlight.extensions.applyFabWindowInsets
 import co.garmax.materialflashlight.features.LightManager
 import co.garmax.materialflashlight.features.modules.ScreenModule
 import co.garmax.materialflashlight.repositories.SettingsRepository
+import co.garmax.materialflashlight.service.ForegroundService
 import co.garmax.materialflashlight.ui.BaseFragment
 import org.koin.android.ext.android.inject
 
@@ -57,7 +58,7 @@ class LightFragment : BaseFragment() {
 
         binding.fab.applyFabWindowInsets()
         binding.fab.keepScreenOn = settingsRepository.isKeepScreenOn
-        binding.fab.setOnClickListener { lightManager.turnOff() }
+        binding.fab.setOnClickListener { ForegroundService.stopService(requireContext()) }
     }
 
     override fun onResume() {
@@ -79,7 +80,9 @@ class LightFragment : BaseFragment() {
         super.onStop()
 
         // Turn off light because screen not visible and for this mode it makes no sense
-        if (lightManager.isTurnedOn) lightManager.turnOff()
+        if (lightManager.isTurnedOn) {
+            ForegroundService.stopService(requireContext())
+        }
     }
 
     private fun setBrightness(percent: Int) {

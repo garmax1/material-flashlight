@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <!-- Informational Play Policy reminder; FGS type + subtype are already in the manifest.
+         Actual Play Console App content declaration is still required when publishing. -->
+    <issue id="ForegroundServicesPolicy" severity="ignore" />
+</lint>

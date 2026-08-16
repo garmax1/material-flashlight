@@ -29,11 +29,11 @@ class LightTileService : TileService() {
         when (qsTile.state) {
             Tile.STATE_ACTIVE -> {
                 setCurrentState(Tile.STATE_INACTIVE)
-                lightManager.turnOff()
+                ForegroundService.stopService(this)
             }
             Tile.STATE_INACTIVE -> {
                 setCurrentState(Tile.STATE_ACTIVE)
-                lightManager.turnOn()
+                ForegroundService.startService(this)
             }
             Tile.STATE_UNAVAILABLE -> {
             }

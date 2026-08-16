@@ -13,6 +13,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import co.garmax.materialflashlight.R
 import co.garmax.materialflashlight.features.LightManager
+import co.garmax.materialflashlight.service.ForegroundService
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
@@ -51,8 +52,11 @@ class WidgetProviderButton : AppWidgetProvider(), KoinComponent {
     override fun onReceive(context: Context, intent: Intent) {
         super.onReceive(context, intent)
         if (ACTION_WIDGET_BUTTON_CLICK == intent.getAction()) {
-            if (lightManager.isTurnedOn) lightManager.turnOff() else lightManager.turnOn()
-
+            if (lightManager.isTurnedOn) {
+                ForegroundService.stopService(context)
+            } else {
+                ForegroundService.startService(context)
+            }
             widgetManager.updateWidgets()
         }
     }

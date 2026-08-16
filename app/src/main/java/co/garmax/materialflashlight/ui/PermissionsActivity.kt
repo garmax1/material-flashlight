@@ -16,9 +16,12 @@ class PermissionsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        intent.getStringArrayExtra(EXTRA_PERMISSIONS_ARRAY)?.let {
-            ActivityCompat.requestPermissions(this, it, RC_CHECK_PERMISSION)
+        val permissions = intent.getStringArrayExtra(EXTRA_PERMISSIONS_ARRAY)
+        if (permissions.isNullOrEmpty()) {
+            finish()
+            return
         }
+        ActivityCompat.requestPermissions(this, permissions, RC_CHECK_PERMISSION)
     }
 
     override fun onRequestPermissionsResult(
@@ -28,10 +31,11 @@ class PermissionsActivity : AppCompatActivity() {
     ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
-        if (requestCode == RC_CHECK_PERMISSION) {
-            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                ForegroundService.startService(this)
-            }
+        if (requestCode == RC_CHECK_PERMISSION &&
+            grantResults.isNotEmpty() &&
+            grantResults.all { it == PackageManager.PERMISSION_GRANTED }
+        ) {
+            ForegroundService.startService(this)
         }
 
         finish()

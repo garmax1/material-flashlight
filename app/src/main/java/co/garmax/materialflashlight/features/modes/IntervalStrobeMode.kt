@@ -19,9 +19,9 @@ class IntervalStrobeMode(private val workerScheduler: Scheduler) : ModeBase() {
             workerScheduler
         )
             .doOnNext { any: Long? -> setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_PERIOD.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { any: Long? -> setBrightness(MIN_LIGHT_VOLUME) }
-            .delay(DELAY_PERIOD.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_PERIOD.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .subscribe { any: Long? -> }
     }
 
@@ -29,10 +29,6 @@ class IntervalStrobeMode(private val workerScheduler: Scheduler) : ModeBase() {
         setBrightness(MIN_LIGHT_VOLUME)
         disposable?.dispose()
         disposable = null
-    }
-
-    override fun checkPermissions(): Boolean {
-        return true
     }
 
     fun updateStrobe(timeOn: Int, timeOff: Int) {

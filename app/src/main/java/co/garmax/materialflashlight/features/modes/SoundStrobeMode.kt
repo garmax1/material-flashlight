@@ -2,12 +2,9 @@ package co.garmax.materialflashlight.features.modes
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.media.AudioFormat
 import android.media.AudioRecord
 import android.media.MediaRecorder
-import androidx.core.content.ContextCompat
-import co.garmax.materialflashlight.ui.PermissionsActivity
 import io.reactivex.Observable
 import io.reactivex.Scheduler
 import io.reactivex.disposables.Disposable
@@ -33,16 +30,11 @@ class SoundStrobeMode(
     private var minAmplitude = 0
 
     override fun checkPermissions(): Boolean {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                Manifest.permission.RECORD_AUDIO
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            PermissionsActivity.startActivity(context, arrayOf(Manifest.permission.RECORD_AUDIO))
-            return false
-        }
         return true
     }
+
+    override fun requiredRuntimePermissions(): List<String> =
+        listOf(Manifest.permission.RECORD_AUDIO)
 
     override fun start() {
         bufferSize = AudioRecord.getMinBufferSize(

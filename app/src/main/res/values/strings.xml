@@ -26,4 +26,6 @@
 
     <string name="time_off_ms">Time Off (ms)</string>
     <string name="time_on_ms">Time On (ms)</string>
+
+    <string name="fgs_special_use_subtype">Keep the flashlight or screen light active while the user uses other apps</string>
 </resources>

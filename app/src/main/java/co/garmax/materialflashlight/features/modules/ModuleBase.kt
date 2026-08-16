@@ -19,6 +19,11 @@ interface ModuleBase {
     val isSupported: Boolean
 
     /**
+     * Runtime permissions required by this module.
+     */
+    fun requiredRuntimePermissions(): List<String> = emptyList()
+
+    /**
      * Initialize and capture resources for module
      */
     fun init()
@@ -34,7 +39,7 @@ interface ModuleBase {
     fun setBrightness(percents: Int)
 
     /**
-     * Check if module request runtime permissions and call permissions dialog if needed
+     * Check if module request additional permissions (e.g. WRITE_SETTINGS) and open dialogs if needed.
      * Return true if permission do not required otherwise false
      */
     fun checkPermissions(): Boolean

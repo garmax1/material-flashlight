@@ -20,41 +20,41 @@ class SosMode(private val workerScheduler: Scheduler) : ModeBase() {
             workerScheduler
         )
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_LONG.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 long
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MAX_LIGHT_VOLUME) }
-            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS)
+            .delay(STROBE_SHORT.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .doOnNext { setBrightness(MIN_LIGHT_VOLUME) } // 1 short
-            .delay(DELAY_LONG.toLong(), TimeUnit.MILLISECONDS)
+            .delay(DELAY_LONG.toLong(), TimeUnit.MILLISECONDS, workerScheduler)
             .subscribe { }
     }
 
@@ -62,10 +62,7 @@ class SosMode(private val workerScheduler: Scheduler) : ModeBase() {
         setBrightness(MIN_LIGHT_VOLUME)
 
         disposableInterval?.dispose()
-    }
-
-    override fun checkPermissions(): Boolean {
-        return true
+        disposableInterval = null
     }
 
     companion object {

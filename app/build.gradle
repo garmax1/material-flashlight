@@ -10,7 +10,7 @@ android {
         applicationId "co.garmax.materialflashlight"
         minSdk libs.versions.minSdk.get().toInteger()
         targetSdk libs.versions.targetSdk.get().toInteger()
-        versionCode 32
+        versionCode 34
         versionName "2.9"
         vectorDrawables.useSupportLibrary = true
         resourceConfigurations += ["en", "zh", "hi", "es", "fr", "ar", "bn", "pt", "ru", "ur"]
